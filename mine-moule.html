@@ -173,8 +173,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '0.8';
+const VERSION = '1.0';
 const CHANGELOG = [
+  { v: '1.0', date: { fr: '13 novembre 2026', en: 'November 13, 2026' },
+    fr: ['Version stable ! Toute l’histoire se joue du premier lit jusqu’à la berceuse de la Grande Moule.', 'Villageois « ! » : dans chaque village, un habitant porte un « ! » quand une nouvelle quête l’attend. Parle-lui pour l’entendre ; elle s’inscrit au journal.', 'Les gardes du village : après « Le toit percé » (ou dès le jour 20 en Survie), deux gardes défendent la maison pendant les sièges. Avec la bannière du Grand Siège, ils descendent aussi au cœur de la Mine-Moule.', 'Les monstres n’apparaissent plus à l’intérieur d’un abri que tu as construit.', 'Téléphone : le bouton F est passé dans la marge et ne cache plus la croix des fenêtres ni l’horloge.', 'Corrections et vérifications de toutes les versions précédentes.'],
+    en: ['Stable release! The whole story plays from the first bed to the Great Mussel’s lullaby.', '“!” villagers: in each village, one villager wears a “!” when a new quest is waiting. Talk to them to hear it; it goes into the journal.', 'Village guards: after “The leaking roof” (or from day 20 in Survival), two guards defend the house during sieges. With the Grand Siege banner, they also come down to the heart of the Mine-Moule.', 'Monsters no longer appear inside a shelter you built.', 'Phone: the F button moved into the margin and no longer covers window close buttons or the clock.', 'Fixes and checks across all earlier versions.'] },
   { v: '0.8', date: { fr: '13 novembre 2026', en: 'November 13, 2026' },
     fr: ['Le Cœur de la Mine-Moule : quand les quatre grandes quêtes sont finies, le puits de la cave descend au cœur.', 'Salle des Savants : trois pierres savantes plus difficiles ferment le passage.', 'Salle des climats : froid, chaleur et vent en une seule salle ; il faut les trois tenues.', 'Salle du siège : huit monstres de tous les pays à vaincre avant d’avancer.', 'La Grande Moule : à moitié de sa vie, elle ne peut plus être blessée. Joue-lui la berceuse des Savants (boîte à musique + trois sceaux) et elle s’endort.', 'Générique de fin sous le ciel étoilé, puis le monde continue. Nouveau costume : le Savant.', 'Le cœur a maintenant un vrai fond de caverne : stalactites et cristaux, plus de soleil.'],
     en: ['The Heart of the Mine-Moule: once the four great quests are done, the cellar shaft leads down to the heart.', 'Hall of Scholars: three harder scholar’s stones close the way.', 'Hall of Climates: cold, heat and wind in one hall; you need all three outfits.', 'Hall of the Siege: eight monsters from every land to beat before going on.', 'The Great Mussel: at half her life she can no longer be hurt. Play her the Scholars’ lullaby (music box + three seals) and she falls asleep.', 'End credits under the starry sky, then the world carries on. New costume: the Scholar.', 'The heart now has a real cavern backdrop: stalactites and crystals, no more sun.'] },
@@ -1345,7 +1348,7 @@ function renderWorld(o) {
     if (T.smoke && !(T.cIn && o.inside)) { for (let k = 0; k < 6; k++) { const ph = (G.t * 0.35 + k / 6) % 1, sx = T.smoke[0] + ox + Math.sin(ph * 6 + k) * 6 + ph * 20, sy = T.smoke[1] - ph * 90; const a = (1 - ph) * 0.55; landX.globalAlpha = a; disc(landX, sx, sy, 4 + ph * 10, '#d8d8de'); landX.globalAlpha = 1; } }
   }
   if (o.blocks) { for (const b of o.blocks) { const sx = b.x - o.camX; if (sx > -40 && sx < W + 8) { drawBlock(landX, sx, GY - (b.row + 1) * 32, b.mat, b.hp / BLOCK_HP[b.mat], b.x * 7 + b.row); drawBind(landX, sx, GY - (b.row + 1) * 32, b); } } for (const f of (o.falling || [])) drawBlock(landX, f.x - o.camX, f.y, f.mat, 1, f.x); }
-  if (o.npcsOn) { drawAnimals(vis, o); drawNpcs(vis, o); }
+  if (o.npcsOn) { drawAnimals(vis, o); drawNpcs(vis, o); } if (!o.inside && o.mobsOn) drawGuards(o);
   G.mobEyes = []; if (o.mobsOn) for (const m of visibleMobs()) { const sx = m.x - o.camX; if (sx > -90 && sx < W + 90) drawMonster(landX, sx, GY - Math.round(m.alt || 0), m, G.mobEyes); }
   if (o.hero) o.hero(landX);
   if (look.tint[3] > 0.01) { landX.save(); landX.globalCompositeOperation = 'source-atop'; landX.fillStyle = 'rgba(' + (look.tint[0] | 0) + ',' + (look.tint[1] | 0) + ',' + (look.tint[2] | 0) + ',' + (look.tint[3] * (o.inside ? 0.55 : 1)).toFixed(3) + ')'; landX.fillRect(0, 0, W, H); landX.restore(); }
@@ -1366,6 +1369,7 @@ function drawNpcs(vis, o) {
       if (st.wait > 0) st.wait -= o.dt; else { st.x += st.dir * 40 * o.dt; st.ph += o.dt * 10; if (st.x < n.lo || st.x > n.hi || hr(G.t | 0, ti, i) < 0.002) { st.dir *= -1; st.wait = 1 + Math.random() * 3; st.x = clamp(st.x, n.lo, n.hi); } }
       drawPerson(landX, st.x + ox, GY, st.pal, { facing: st.dir, walk: st.wait <= 0, phase: st.ph, kid: st.kid, blink: (G.t + i) % 3.7 < 0.12 });
       st.wx = ti * TW + st.x;
+      drawBang(st, i, ox);
     });
   }
 }
@@ -2446,6 +2450,33 @@ function creditsDraw(dt) { const c = G.credits, fr = Save.d.lang === 'fr'; c.t +
   lines.forEach((l, i) => { const y = H + 40 + i * 36 - c.t * 40; if (y > -40 && y < H + 40) text(ctx, l, W / 2, y, i === 0 ? 40 : 18, i === 0 ? '#ffd23f' : '#f3e6c4', 'center', i === 0 ? 700 : 500); });
   if (c.t > 26 || (c.t > 3 && (Input.hit('pause') || Input.hit('confirm')))) { G.credits = null; G.s.ended = 1; const pr = profile(); if (!pr.costumes.includes('scholar')) { pr.costumes.push('scholar'); saveProfile(pr); } goArea(0, G.world.areas[0].homeT * TW + 540); setTimeout(() => { G.inside = true; }, 700); } }
 
+// ── 1.0: "!" villagers and village guards ───────────────────────────
+const BANG_LANES = { 0: ['F'], 1: ['L', 'P'], 3: ['L', 'C'], 4: ['C'], 5: ['C'] };
+function bangQuest(area) { const s = G.s; if (!story() || !s.q) return null; const lanes = BANG_LANES[area]; if (!lanes) return null; s.qHeard = s.qHeard || {};
+  for (const q of QUESTS) { const r = s.q[q.id]; if (r && r.st === 'open' && !s.qHeard[q.id] && lanes.includes(q.lane)) return q; } return null; }
+function drawBang(st, i, ox) { if (i !== 0 || st.kid || !st.vkey) return; const q = bangQuest(G.p.area); if (!q) return; const bx = st.x + ox, by = GY - 104 + Math.round(Math.sin(G.t * 5) * 4);
+  R(landX, bx - 9, by - 14, 18, 26, '#0e0805'); R(landX, bx - 7, by - 12, 14, 22, '#ffd23f'); R(landX, bx - 2, by - 9, 4, 11, '#5a3b24'); R(landX, bx - 2, by + 4, 4, 4, '#5a3b24'); }
+function npcQuest(npc, n) { if (!npc.vkey || npc.kid) return false; const q = bangQuest(G.p.area); if (!q) return false; const fr = Save.d.lang !== 'en';
+  const A = G.world.areas[G.p.area], ti = Math.floor(n.wx / TW); const first = Object.keys(G.npcs).find((k) => k.startsWith(G.p.area + ':' + ti + ':')); if (first && G.npcs[first] !== npc) return false;
+  G.s.qHeard[q.id] = 1; say((fr ? 'J’ai besoin d’aide : ' : 'I need help: ') + q.t[fr ? 0 : 1], n.wx, GY - 74); npc.wait = 4; npc.dir = Math.sign(G.p.x - n.wx) || 1;
+  G.qToast = { text: q.name + ' · ' + (fr ? 'dans le journal (J)' : 'in the journal (J)'), t: 4 }; Audio.sfx('alert'); return true; }
+// guards: from F10 (Survie: day 20) they hold the house during sieges; with the banner (E1) they come to the heart's siege hall
+const GUARD_PAL = { skin: '#e8b88a', skinDk: '#c8946a', hair: '#3a2a1a', hairHi: '#5a4028', shirt: '#7a2a2a', shirtDk: '#5a1a1a', shirtHi: '#a04040', pants: '#4a4a5a', pantsDk: '#34343e', boot: '#3a2a1a', hat: '#8a8e96' };
+function guardPosts() { const s = G.s, p = G.p; if (G.inside || G.room) return null;
+  if (p.area === 0 && qDone('F10') && s.siege && !s.siege.ended) { const hc = G.world.areas[0].homeT * TW + 480; return [hc - 170, hc + 170]; }
+  if (p.area === 6 && s.banner && !s.heartSiege) { const A = G.world.areas[6], si = A.terrains.findIndex((t) => t.kind === 'hsiege'); if (si >= 0 && Math.floor(p.x / TW) >= si - 1) return [si * TW + 140, si * TW + 220]; }
+  return null; }
+function updateGuards(dt) { const posts = guardPosts(); if (!posts) { G.guards = null; return; } const key = G.p.area + ':' + posts[0];
+  if (!G.guards || G.guards.key !== key) G.guards = { key, g: posts.map((x, i) => ({ x, post: x, cd: 0.5 + i * 0.4, dir: i ? -1 : 1, ph: 0, swing: 0 })) };
+  const foes = visibleMobs().filter((m) => !m.boss && !m.hidden && m.hp > 0 && !(m.calm && m.calm(m)));
+  for (const g of G.guards.g) { g.cd -= dt; g.swing = Math.max(0, g.swing - dt);
+    let t = null, best = 260; for (const m of foes) { const d = Math.abs(m.x - g.post); if (d < best) { best = d; t = m; } }
+    const goal = t ? t.x - Math.sign(t.x - g.x || 1) * 46 : g.post, dx = goal - g.x;
+    if (Math.abs(dx) > 6) { g.x += Math.sign(dx) * Math.min(Math.abs(dx), 110 * dt); g.ph += dt * 10; g.dir = Math.sign(dx); } else if (t) g.dir = Math.sign(t.x - g.x) || g.dir;
+    if (t && Math.abs(t.x - g.x) < 64 && g.cd <= 0) { g.cd = 1.3; g.swing = 0.25; const def = MOB[t.type]; t.hp -= 34; t.hurtT = 0.3; t.kb = (Math.sign(t.x - g.x) || 1) * (def.heavy ? 40 : 180); floatText(t.x, GY - def.head - (t.alt || 0), '-34', '#ffb0a0'); Audio.sfx('hit'); if (t.hp <= 0) { G.lastWType = 'pierce'; killMob(t); } } } }
+function drawGuards(o) { if (!G.guards) return; for (const g of G.guards.g) { const sx = g.x - o.camX; if (sx < -60 || sx > W + 60) continue; drawPerson(landX, sx, GY, GUARD_PAL, { facing: g.dir, walk: Math.abs(g.ph % 1) > 0.01, phase: g.ph, blink: (G.t + g.post) % 3.3 < 0.12 });
+    const tip = sx + g.dir * (g.swing > 0 ? 40 : 18); R(landX, sx + g.dir * 12 - 1, GY - 92, 3, 70, '#6a4529'); R(landX, tip - 3, GY - (g.swing > 0 ? 66 : 100), 7, 9, '#c8ccd4');
+    if (G.s.banner) { R(landX, sx - g.dir * 14, GY - 110, 2, 60, '#5a3b24'); R(landX, sx - g.dir * 14 - (g.dir > 0 ? 18 : 0), GY - 110, 18, 12, '#c0302a'); R(landX, sx - g.dir * 14 - (g.dir > 0 ? 14 : -4), GY - 107, 10, 6, '#ffd23f'); } } }
 // ── NIGHT SIEGES ────────────────────────────────────────────────────
 function startSiege(day, quiet) {
   const s = G.s, Lx = L();
@@ -2934,7 +2965,7 @@ function playUpdate(dt) {
   G.siNow = si2; G.songI = playlist(s, si2); if (!(G.room && G.room.kind === 'juke')) G.jukeKey = null; const landS = LANDS[p.area] && p.area >= 3 ? LANDS[p.area].season : si2.key; const wantM = G.jukeKey || songKey(G.songI, landS, tm.ph === 'dusk' || tm.ph === 'night' || p.area === 4 || p.area === 6);
   if (G.music !== wantM) { const fade = !!G.music; G.music = wantM; Audio.playMusic(wantM, fade); }
   if (G.credits) return { si: si2, tm };
-  updateSiege(si2, tm); updateFalling(dt); updateLantern(dt); climateTick(dt); updateEShots(dt); landChecks();
+  updateSiege(si2, tm); updateGuards(dt); updateFalling(dt); updateLantern(dt); climateTick(dt); updateEShots(dt); landChecks();
   if (G.room) { roomUpdate(dt); return { si: si2, tm }; }
   if (G.combat) { updateCombat(dt); updateMobs(dt, si2, G.look || lookFor(S[si2.key], tm)); G.near = null; G.act = null; return { si: si2, tm }; }
   p.grace = Math.max(0, (p.grace || 0) - dt);
@@ -3050,7 +3081,7 @@ function interact(n, si) {
     case 'treasure': openTreasure(); break;
     case 'ore': if (!s.tools.pickaxe) { say(Lx.needPick); Audio.sfx('buzz'); } else if (G.dark) { say(Lx.tooDark); Audio.sfx('buzz'); } else { const q = it.ore === 'metal' ? 2 : 3; G.act = { tool: 'pick', t: 0, dur: 5 * q, scav: true, label: Lx.oreT, done: () => { emitQ('mine'); if (gain(it.ore, q)) { s.harv[it.id] = 'forever'; TCACHE.clear(); } } }; } break;
     case 'vdoor': enterRoom(n); break;
-    case 'npc': { const npc = it.npc, v = npc.vkey ? vstate(npc.vkey) : null, lines = v && v.angryUntil ? Lx.angryHello : Lx.hello; say(lines[Math.random() * lines.length | 0], n.wx, GY - (npc.kid ? 60 : 74)); npc.wait = 3; npc.dir = Math.sign(G.p.x - n.wx) || 1; Audio.sfx('talk'); if (npc.vkey && !npc.kid) { G.tradeV = npc.vkey; G.tradeName = npc.vname; G.tradeI = 0; setTimeout(() => { if (!G.panel && G.scene === 'PLAY' && !G.combat) G.panel = 'trade'; }, 600); } break; }
+    case 'npc': { if (npcQuest(it.npc, n)) break; const npc = it.npc, v = npc.vkey ? vstate(npc.vkey) : null, lines = v && v.angryUntil ? Lx.angryHello : Lx.hello; say(lines[Math.random() * lines.length | 0], n.wx, GY - (npc.kid ? 60 : 74)); npc.wait = 3; npc.dir = Math.sign(G.p.x - n.wx) || 1; Audio.sfx('talk'); if (npc.vkey && !npc.kid) { G.tradeV = npc.vkey; G.tradeName = npc.vname; G.tradeI = 0; setTimeout(() => { if (!G.panel && G.scene === 'PLAY' && !G.combat) G.panel = 'trade'; }, 600); } break; }
     case 'troll': if (s.gates && s.gates.cross) { G.tradeV = 'troll'; G.tradeName = 'Troll'; G.panel = 'trade'; G.tradeI = 0; say(Lx.trollShop); break; } say(Lx.trollBlocks); setTimeout(() => openTablet('crossing', 'gate', 0, () => { s.gates = s.gates || {}; s.gates.cross = 1; emitQ('gate', { g: 'cross' }); const tm = Object.values(G.mobs).find((q) => q.type === 'troll'); if (tm) tm.home = tm.x + 290; TCACHE.clear(); }), 900); break;
     case 'tablet': { const tid = it.tid; s.tablets = s.tablets || {}; if (s.tablets[tid]) { say(Lx.nothing); Audio.sfx('buzz'); break; } const ring = ringOf(G.p.area, G.p.x); openTablet(tid, 'treasure', ring, () => { s.tablets[tid] = 1; TCACHE.clear(); treasure(ring); }); break; }
     case 'bestiary': G.panel = 'bestiary'; G.bkI = 0; Audio.sfx('door'); break;

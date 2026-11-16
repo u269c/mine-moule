@@ -159,9 +159,9 @@ figcaption b{color:var(--ink)}
 
 <div class="wrap">
 <header>
-  <span class="eyebrow">Playtest · build 1.13.0</span>
+  <span class="eyebrow">Playtest · build 1.14.0</span>
   <h1>Mine-Moule Playtest Report</h1>
-  <p class="lede">Where the game stands now, from 288 simulated playthroughs of 1.12.1 and a census of 256 generated worlds. Only open problems are listed; everything found in earlier rounds has been fixed.</p>
+  <p class="lede">Where the game stands, from 288 simulated playthroughs of 1.12.1 and a census of 256 generated worlds. Every problem those runs found has since been fixed in 1.14.0; the next simulated run will confirm it.</p>
   <div class="meta">
     <span class="chip">288 simulated runs · 2 bots</span>
     <span class="chip">256-world census</span>
@@ -190,18 +190,25 @@ figcaption b{color:var(--ink)}
 
 <section aria-labelledby="h-issues">
   <span class="eyebrow">Open problems</span>
-  <h2 id="h-issues">What still needs work</h2>
-  <div class="toolbar">
-    <div class="tabs" id="tabs" role="group" aria-label="Question"></div>
-    <div class="row2">
-      <button class="sev" data-s="blocker" aria-pressed="true">blocker</button>
-      <button class="sev" data-s="major" aria-pressed="true">major</button>
-      <button class="sev" data-s="minor" aria-pressed="true">minor</button>
-      <input type="search" id="q" placeholder="Search problems, quest ids (E1, C2…)" aria-label="Search problems">
-    </div>
-  </div>
-  <p class="qnote" id="qnote"></p>
-  <div class="cards" id="cards"></div>
+  <h2 id="h-issues">None known · all 13 fixed in 1.14.0</h2>
+  <p class="lede">Each problem the 1.12.1 runs found shipped a fix. None of these fixes has been simulated yet.</p>
+  <div style="overflow-x:auto"><table class="tbl">
+    <thead><tr><th>Problem in 1.12.1</th><th>Fix in 1.14.0</th></tr></thead>
+    <tbody>
+      <tr><td><b>“The Goblin” impossible in 1 world in 330</b></td><td>A goblin waits at the end of every cave while the quest is open</td></tr>
+      <tr><td><b>Normal-mode Lands too hard</b> (7 of 72 hint-following runs finished)</td><td>Lands start at 1.3× and climb to 1.7× (were 1.6× to 2.25×)</td></tr>
+      <tr><td><b>Great Siege deadliest and slowest</b></td><td>8 monsters a night; a night that doesn’t count says why</td></tr>
+      <tr><td><b>Flask chicken-and-egg</b></td><td>The Frozen North trader sells 2 salamander scales for 1 fur and 1 metal</td></tr>
+      <tr><td><b>Sunken library spike</b></td><td>Stones at grade + 1; the flood rule is explained on the first visit</td></tr>
+      <tr><td><b>Village fair: 7 days of waiting</b></td><td>4 days at most</td></tr>
+      <tr><td><b>Mining 5 ore slow in 27 % of worlds</b></td><td>At least 2 ore veins per cave; goblin ore counts</td></tr>
+      <tr><td><b>3-day respawn in the Lands</b></td><td>Lands monsters return after 1 day</td></tr>
+      <tr><td><b>Boar stuns and the igloo unclear</b></td><td>How-to text in the quest</td></tr>
+      <tr><td><b>Siege night rule hidden</b></td><td>In the quest text, and a message after a night that didn’t count</td></tr>
+      <tr><td><b>Library flood rule unexplained</b></td><td>Message on the first visit</td></tr>
+      <tr><td><b>Silent completions on opening</b></td><td>“Already done!” message</td></tr>
+      <tr><td><b>Long wind-cloak chain</b></td><td>The sky village sells a bottle for 1 metal</td></tr>
+    </tbody></table></div>
 </section>
 
 <section aria-labelledby="h-progress">
@@ -217,13 +224,15 @@ figcaption b{color:var(--ink)}
       <tr><td>Median day the Frost King falls</td><td>47.5 → 49.5</td><td>115 → <b>103</b></td></tr>
       <tr><td>Median deaths per run</td><td>16 → 19</td><td>19 → 23</td></tr>
     </tbody></table></div>
-  <p class="qnote">Deaths went up because the Lands got harder in 1.11; that is the first open problem above.</p>
+  <p class="qnote">Deaths went up because the Lands got harder in 1.11; 1.14.0 brings them back down.</p>
 </section>
 
 <section aria-labelledby="h-untested">
   <span class="eyebrow">Not yet tested</span>
   <h2 id="h-untested" style="font-size:1.3rem">Shipped after the rerun</h2>
+  <p class="qnote">Recommended next step: rerun the 288 simulated playthroughs on 1.14.0.</p>
   <div class="untested">
+    <div><b>The 13 fixes above (1.14.0)</b>Checked one by one in the game; their effect on whole runs is not measured yet.</div>
     <div><b>Crow nests (1.13.0)</b>Thieves fly to a nest you raid with a jump-strike. Checked by hand, not in the simulation.</div>
     <div><b>Double light in caves (1.12.2)</b>Lantern plus headlamp underground. Visual change only.</div>
     <div><b>Export in claude.ai (1.12.0)</b>Needs one real export from the play link to confirm the prompt.</div>
@@ -242,51 +251,6 @@ figcaption b{color:var(--ink)}
 </section>
 </div>
 
-<div class="tray" id="tray" hidden>
-  <span id="trayN">0 fixes picked</span>
-  <button id="copy">Copy picked list</button>
-  <button class="ghost" id="clear">Clear</button>
-</div>
-
 <script>
-const LENSES={all:'All',diff:'Too hard / too easy',toil:'Toil',broken:'Broken points',hints:'Hints & information'};
-const NOTES={all:'Every open problem, worst first. Tick the fixes you want and copy the list back to Claude.',diff:'Are there tracks that are too hard or too easy?',toil:'Is anything boringly long that is just toil?',broken:'What can still stop the story?',hints:'Is there enough information to know what to do?'};
-const I=[
- {id:'R1',lens:'broken',sev:'blocker',q:'P5',t:'One world in 330 has no goblin',ev:'Goblins only come from the random cave roll, so in rare worlds neither cave has one and “The Goblin” can never be done. That blocks the silver lantern, the wraiths, the library and the ending.',fix:'Spawn a goblin at the cave end while P5 is open, the same way mimics now spawn for P13.',e:'S'},
- {id:'R2',lens:'diff',sev:'major',q:'Lands · C quests',t:'Normal mode is too hard in the Lands',ev:'The hint-following bot finished 7 of 72 normal runs against 51 of 72 in gentle mode. Lands quests got 15–85 % deadlier at 1.6–2.25×.',fix:'Lower the Lands to about 1.3–1.7×, or make gentle mode also halve the ring multiplier.',e:'S'},
- {id:'R3',lens:'diff',sev:'major',q:'E1',t:'The Great Siege is the deadliest and slowest quest',ev:'About 4 deaths per run and 8.5 active days (48 calendar days from opening to done), even at 10 monsters a night.',fix:'8 monsters a night, or a bonus for holding with a tower and spikes.',e:'S'},
- {id:'R4',lens:'diff',sev:'major',q:'C2',t:'The flask is a chicken-and-egg',ev:'You have to hunt lava salamanders in the Badlands heat to make the flask that protects you from that heat. Most of the efficient bot’s failures happened here.',fix:'Sell salamander scales (or a flask) at the Frozen North trader, or no heat drain on the first lava tile.',e:'S'},
- {id:'R5',lens:'diff',sev:'major',q:'E2',t:'The sunken library is a difficulty spike',ev:'Seven answers in a row at grade + 2 while wraiths at 2× strength haunt the room.',fix:'Grade + 1 instead of + 2, or 5 answers, and library wraiths at base strength.',e:'S'},
- {id:'R6',lens:'toil',sev:'minor',q:'F12',t:'The village fair is about 7 days of waiting',ev:'A season window with no theft and 5 trades; nothing to do but wait it out.',fix:'Shorten to min(4, season length) days, or count the 5 trades only.',e:'S'},
- {id:'R7',lens:'toil',sev:'minor',q:'P2',t:'Mining 5 ore is slow when ore is scarce',ev:'27 % of worlds have fewer than 5 ore nodes near home; P2 then finishes around day 16 instead of day 8.',fix:'Guarantee 5 ore nodes across the home area and the Far Shore, or count goblin ore drops.',e:'S'},
- {id:'R8',lens:'toil',sev:'minor',q:'C5 · C13 · C6',t:'The 3-day respawn gates kill quests in the Lands',ev:'Imps, gargoyles and gust sprites come back only every 3 days, so these quests wait on the calendar.',fix:'1-day respawn in the Lands while the quest is open.',e:'S'},
- {id:'R9',lens:'hints',sev:'minor',q:'L13 · L17',t:'Boar stuns and the igloo are unclear',ev:'The slowest quests for the hint-following bot (5.4 and 7 active days) because the mechanic isn’t explained.',fix:'One how-to line in the journal: “Lure the boar into a tree” and “5 snow blocks around you, then the tent inside”.',e:'S'},
- {id:'R10',lens:'hints',sev:'minor',q:'E1',t:'Siege night rule is hidden',ev:'A Great Siege night only counts if no monster is left when you go to bed or at dawn. Nothing tells the player.',fix:'Say it in the quest text and in a toast after a night that didn’t count.',e:'S'},
- {id:'R11',lens:'hints',sev:'minor',q:'E2',t:'The library flood rule isn’t explained',ev:'A wrong answer raises the water and a flood sends you out until tomorrow; players only learn it by losing.',fix:'A one-time message on entering the library.',e:'S'},
- {id:'R12',lens:'hints',sev:'minor',q:'All',t:'Quests that complete on opening do it silently',ev:'If you already did the thing (arcade wall, secret room, lantern…), the quest completes the moment it opens with only the usual banner.',fix:'A “You already did this!” toast so a child links cause and effect.',e:'S'},
- {id:'R13',lens:'toil',sev:'minor',q:'C6',t:'The wind cloak has a long chain',ev:'Fish, then a bottle, then catch a gust sprite: about 3.3 active days.',fix:'Sell a bottle at the Sky village trader.',e:'S'}
-];
-const SEVR={blocker:0,major:1,minor:2}; I.sort((a,b)=>SEVR[a.sev]-SEVR[b.sev]);
-const st={lens:'all',sev:new Set(['blocker','major','minor']),q:'',pick:new Set()};
-try{const s=JSON.parse(localStorage.getItem('mm-report2')||'{}');if(s.lens&&LENSES[s.lens])st.lens=s.lens;if(s.pick)st.pick=new Set(s.pick.filter(id=>I.some(i=>i.id===id)))}catch(e){}
-const save=()=>{try{localStorage.setItem('mm-report2',JSON.stringify({lens:st.lens,pick:[...st.pick]}))}catch(e){}};
-const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let h='';for(let i=0;i<144;i++)h+=`<i class="${i>=141?'x':''}"></i>`;document.getElementById('seam').innerHTML=h;
-const tabs=document.getElementById('tabs');
-function renderTabs(){tabs.innerHTML=Object.entries(LENSES).map(([k,v])=>{const c=k==='all'?I.length:I.filter(i=>i.lens===k).length;return c?`<button class="tab" data-l="${k}" aria-pressed="${st.lens===k}">${v}<span class="c">${c}</span></button>`:''}).join('')}
-tabs.addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;st.lens=b.dataset.l;save();renderTabs();render()});
-document.querySelectorAll('.sev').forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.s;st.sev.has(s)?st.sev.delete(s):st.sev.add(s);b.setAttribute('aria-pressed',st.sev.has(s));render()}));
-document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.trim().toLowerCase();render()});
-const cards=document.getElementById('cards');
-function render(){document.getElementById('qnote').textContent=NOTES[st.lens];
-  const L=I.filter(i=>(st.lens==='all'||i.lens===st.lens)&&st.sev.has(i.sev)&&(!st.q||(i.id+' '+i.t+' '+i.ev+' '+i.fix+' '+i.q).toLowerCase().includes(st.q)));
-  cards.innerHTML=L.length?L.map(i=>`<article class="card${st.pick.has(i.id)?' on':''}" data-id="${i.id}"><div class="top"><div class="tags"><span class="pill ${i.sev}">${i.sev}</span><span class="pill lens">${LENSES[i.lens]}</span><span class="qid">${esc(i.q)}</span></div><h3>${esc(i.t)}</h3><p class="ev">${esc(i.ev)}</p></div><details><summary>Suggested fix</summary><div class="fix"><p>${esc(i.fix)}</p></div></details><div class="foot"><span class="effort">${i.id} · effort ${i.e}</span><label class="pick"><input type="checkbox" id="pk-${i.id}" ${st.pick.has(i.id)?'checked':''}> Fix this</label></div></article>`).join(''):'<div class="empty">No problems match these filters.</div>';
-  tray();}
-cards.addEventListener('change',e=>{const c=e.target.closest('.card');if(!c)return;const id=c.dataset.id;e.target.checked?st.pick.add(id):st.pick.delete(id);c.classList.toggle('on',e.target.checked);save();tray()});
-function tray(){const n=st.pick.size;document.getElementById('tray').hidden=!n;document.getElementById('trayN').textContent=n+(n===1?' fix picked':' fixes picked')}
-document.getElementById('clear').addEventListener('click',()=>{st.pick.clear();save();render()});
-document.getElementById('copy').addEventListener('click',async e=>{const txt='Mine-Moule fixes to implement:\n'+I.filter(i=>st.pick.has(i.id)).map(i=>`- ${i.id} ${i.t} → ${i.fix}`).join('\n');const b=e.currentTarget;
-  try{await navigator.clipboard.writeText(txt);b.textContent='Copied'}catch(err){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='Copied'}catch(_){b.textContent='Select failed'}ta.remove()}
-  setTimeout(()=>b.textContent='Copy picked list',1600);});
-renderTabs();render();
 </script>

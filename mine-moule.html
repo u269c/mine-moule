@@ -186,8 +186,23 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.9.5';
+const VERSION = '1.10.4';
 const CHANGELOG = [
+  { v: '1.10.4', k: 'xx', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Les grottes gardent leur entrée dégagée : plus de rocher, de tas de pierres ni de pierre à énigme devant l’ouverture.', 'Une grotte tout au bout d’une région n’est plus à moitié cachée par la falaise (ni sous l’arche du Grand Nord) : elle est déplacée plus loin du bord.'],
+    en: ['Caves keep their doorstep clear: no more boulder, stone pile or riddle stone in front of the opening.', 'A cave at the very end of a region is no longer half hidden by the cliff (or under the Frozen North arch): it moves away from the edge.'] },
+  { v: '1.10.3', k: 'fi', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Lance-pierres : il vise tout seul le monstre le plus proche dans un rayon d’une demi-largeur d’écran (le héros se tourne vers lui), et la pierre suit une vraie courbe avec la gravité — du haut d’une tour, elle plonge sur sa cible. Sans cible, c’est un lancer en cloche qui retombe à environ une demi-largeur d’écran.', 'La pierre tourne en vol et laisse une petite traînée.'],
+    en: ['Rock thrower: it aims by itself at the closest monster within half a screen (the hero turns toward it), and the stone follows a real curve under gravity — from the top of a tower it dives onto its target. With nothing in range, it is a lob that lands about half a screen away.', 'The stone spins in flight and leaves a small trail.'] },
+  { v: '1.10.2', k: 'ix', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Voyage rapide : le mode chiffres garde les icônes et les titres Énergie / Faim, seuls les chiffres remplacent les barres.', 'Voyage rapide : tant que tu arrives vivant (un peu d’énergie et pas encore mort de faim), le voyage est permis, même si tu arrives à bout de forces — un avertissement jaune te prévient. Il n’est refusé que si tu t’écroulerais en chemin.'],
+    en: ['Quick travel: numbers view keeps the Energy / Hunger icons and titles; only the numbers replace the bars.', 'Quick travel: as long as you arrive alive (a little energy left and not starving), the trip is allowed, even running on empty — a yellow warning tells you. It is only refused if you would collapse on the way.'] },
+  { v: '1.10.1', k: 'i', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Voyage rapide : par défaut, la fenêtre montre tes vraies barres d’énergie et de faim, et la portion qui va fondre ou grossir clignote doucement (en rouge si le trajet est impossible). Tab (ou le petit interrupteur en haut) bascule vers les chiffres.'],
+    en: ['Quick travel: by default the window shows your real energy and hunger bars, and the slice that will shrink or grow breathes in and out (red if the trip can’t be done). Tab (or the little switch at the top) flips to the numbers.'] },
+  { v: '1.10.0', k: 'fi', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Voyage rapide depuis la carte du monde : choisis un lieu déjà découvert, puis « Voyage rapide » (Entrée, ✕ à la manette, ou clic). Le trajet est instantané, mais il coûte le temps, l’énergie et la faim d’une course jusque-là — même à travers les passages entre les anneaux.', 'La fenêtre de confirmation montre la durée, l’énergie et la faim avant → après. Si tu es trop épuisé ou trop affamé pour tenir le trajet, en pleine bagarre ou dans une grotte, le voyage est refusé et la raison est affichée.'],
+    en: ['Quick travel from the world map: pick any place you have discovered, then “Quick travel” (Enter, ✕ on a controller, or click). The trip is instant, but it costs the time, energy and hunger of running all the way there — even through the passages between rings.', 'The confirm window shows the time, energy and hunger before → after. If you are too worn out or too hungry to last the trip, in the middle of a fight, or in a cave, the trip is refused and the reason shown.'] },
   { v: '1.9.5', k: 'x', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
     fr: ['Chutes : ce qui compte maintenant, c’est la hauteur dont tu tombes sous l’endroit d’où tu es parti — l’arc d’un saut normal est gratuit. On ne se fait mal qu’au-delà d’une fois et demie la hauteur du plus haut saut (environ 4 blocs et demi) : sauter d’une tour de 3 blocs ou descendre d’une marche ne fait plus mal.'],
     en: ['Falls: what counts now is how far below your take-off point you land — a normal jump’s arc is free. You only get hurt beyond 1.5× the highest jump (about 4½ blocks): jumping off a 3-block tower or down one step no longer hurts.'] },
@@ -1361,7 +1376,9 @@ function buildTerrain(world, area, ti, P) {
   // the Far Shore ravine (bridge quest) always sits on terrain 1: keep it plain ground so nothing is built over the hole
   const ravT = !A.land && !A.cave && area === 1 && ti === 1, k = ravT && !['plains', 'forest', 'mountain'].includes(T.kind) ? 'plains' : T.kind, oakOrPine = P.snow ? 'pine' : 'oak', back = 'rgba(40,60,90,0.32)';
   const inter = (lx, ly, kind, extra) => out.inter.push(Object.assign({ lx, ly, kind, id: aid + ':' + ti + ':' + kind + ':' + lx }, extra || {}));
-  const stone = (lx) => out.stones.push({ lx, id: aid + ':' + ti + ':s' + lx });
+  // a cave keeps its doorstep clear: no boulder, stone pile or riddle stone in front of it, and never under the cliff at the end of the world
+  const caveX = T.cave && !A.land ? (ti === A.terrains.length - 1 ? 330 : 820) : -9999, nearCave = (lx, d = 170) => Math.abs(lx - caveX) < d;
+  const stone = (lx) => { if (!nearCave(lx, 90)) out.stones.push({ lx, id: aid + ':' + ti + ':s' + lx }); };
   if (k.startsWith('cave')) { buildCave(x, out, A, T, ti, seed, r, aid, inter); spawnMonsters(out, k, aid, ti, r); return out; }
   if (A.land) { buildLand(x, out, A, T, ti, P, r, aid, inter, world, area); if (ti === 0) out.edge = -1; if (ti === A.terrains.length - 1) out.edge = 1; return out; }
   if (area === 1 && ti === A.terrains.length - 1) { drawArch(x, 700, GY, P); inter(700, GY - 200, 'cross2'); }
@@ -1385,12 +1402,12 @@ function buildTerrain(world, area, ti, P) {
   // foreground props
   if (k === 'yard') { drawFence(x, 40, 200, GY, P); drawBush(x, 760, GY, P, seed); if (aid === 0 && ti === world.areas[0].homeT + 1) { drawGarden(x, GY); inter(640, GY - 40, 'garden'); } else if (r() < 0.8) stone(400 + (r() * 300 | 0)); }
   if (k === 'forest') { const tx = 300 + (r() * 360 | 0); { const ev = A.envs[T.env]; if (ti === ev.t0 + hash(world.seed, area, T.env, 5) % ev.n) out.pickups.push({ lx: tx < 480 ? tx + 230 : tx - 230, kind: 'log', id: aid + ':' + ti + ':log' }); } if (harvested(aid + ':' + ti + ':tree:' + tx)) drawStump(x, tx, GY, P); else { if (!liveHarv(aid + ':' + ti + ':tree:' + tx)) putTree(x, oakOrPine, tx, GY, P, seed + 99, 1); inter(tx, GY - 150, 'tree', { spr: { k: oakOrPine, seed: seed + 99, P } }); } drawBush(x, tx < 480 ? 760 : 160, GY, P, seed + 5); if (!P.snow) drawMushrooms(x, tx + 70, GY, seed); if (T.cave) { drawCave(x, tx < 480 ? 820 : 140, GY, P); inter(tx < 480 ? 820 : 140, GY - 120, 'cave'); } if (r() < 0.4) stone(100 + (r() * 760 | 0)); }
-  if ((k === 'plains' || k === 'mountain') && !ravT) { const bx = 560 + (r() * 260 | 0); if (hr(seed, ti, 4242) < (k === 'plains' ? 0.3 : 0.5)) { if (harvested(aid + ':' + ti + ':boulder:' + bx)) drawRubble(x, bx, GY, P); else { if (!liveHarv(aid + ':' + ti + ':boulder:' + bx)) drawBoulder(x, bx, GY, P, seed, true); inter(bx, GY - 72, 'boulder', { spr: { k: 'boulder', seed, P } }); } } if (k === 'plains') { drawBush(x, 140 + (r() * 200 | 0), GY, P, seed + 7); } else { putTree(x, 'pine', 120 + (r() * 140 | 0), GY, P, seed + 8, 0.8); } for (let i = 0; i < (k === 'mountain' ? 3 : 1); i++) if (r() < 0.8) stone(60 + (r() * 380 | 0) + i * 120); }
+  if ((k === 'plains' || k === 'mountain') && !ravT) { const bx = 560 + (r() * 260 | 0); if (hr(seed, ti, 4242) < (k === 'plains' ? 0.3 : 0.5) && !nearCave(bx, 200)) { if (harvested(aid + ':' + ti + ':boulder:' + bx)) drawRubble(x, bx, GY, P); else { if (!liveHarv(aid + ':' + ti + ':boulder:' + bx)) drawBoulder(x, bx, GY, P, seed, true); inter(bx, GY - 72, 'boulder', { spr: { k: 'boulder', seed, P } }); } } if (k === 'plains') { drawBush(x, 140 + (r() * 200 | 0), GY, P, seed + 7); } else { putTree(x, 'pine', 120 + (r() * 140 | 0), GY, P, seed + 8, 0.8); } for (let i = 0; i < (k === 'mountain' ? 3 : 1); i++) if (r() < 0.8) stone(60 + (r() * 380 | 0) + i * 120); }
   if (k === 'climb') { drawClimbWall(x, 520, GY, P, seed); inter(520, GY - 240, 'climb'); inter(520, GY + WALL_TOP - 50, 'wallChest', { top: true }); stone(200); stone(800); }
-  if ((k === 'mountain' || k === 'climb') && T.cave) { drawCave(x, 820, GY, P); inter(820, GY - 120, 'cave'); }
+  if ((k === 'mountain' || k === 'climb') && T.cave) { drawCave(x, caveX, GY, P); inter(caveX, GY - 120, 'cave'); }
   if (T.crossing) { drawRavine(x, 330, 560, P, true); drawArch(x, 640, GY, P); inter(640, GY - 200, 'cross'); inter(470, GY - 150, 'troll'); out.reserve = [[300, 600]];
     if (!(G.s && G.s.trollSulk === (G.s && G.s.clock.day))) out.monsters.push({ type: 'troll', lx: G.s && G.s.gates && G.s.gates.cross ? 760 : 470, night: false, id: aid + ':' + ti + ':troll', style: 0 }); }
-  if (k !== 'home' && k !== 'vhouse' && k !== 'vpark' && k !== 'vmarket' && !T.crossing && k !== 'arrival' && hash(world.seed, area, ti, 61) % 9 === 0) { const tx = 140 + hash(world.seed, area, ti, 62) % 160, tid = aid + ':' + ti + ':tablet'; drawTabletStone(x, tx, GY, G.s && G.s.tablets && G.s.tablets[tid]); inter(tx, GY - 100, 'tablet', { tid }); }
+  if (k !== 'home' && k !== 'vhouse' && k !== 'vpark' && k !== 'vmarket' && !T.crossing && k !== 'arrival' && !T.cave && hash(world.seed, area, ti, 61) % 9 === 0) { const tx = 140 + hash(world.seed, area, ti, 62) % 160, tid = aid + ':' + ti + ':tablet'; drawTabletStone(x, tx, GY, G.s && G.s.tablets && G.s.tablets[tid]); inter(tx, GY - 100, 'tablet', { tid }); }
   if (area === 1 && k === 'forest' && ti === campTerrain(world) && !(G.s && G.s.chiefDone) && (!story() || qOpen('L5'))) { drawCamp(x, 600, GY); out.reserve = [[480, 760]]; out.monsters.push({ type: 'chief', lx: 620, night: false, id: aid + ':' + ti + ':chief', style: 0 }); out.monsters.push({ type: 'brigand', lx: 520, night: false, id: aid + ':' + ti + ':g1', style: 1 }); out.monsters.push({ type: 'brigand', lx: 720, night: false, id: aid + ':' + ti + ':g2', style: 2 }); }
   if (k === 'arrival') { drawArch(x, 480, GY, P); inter(480, GY - 200, 'back'); putTree(x, oakOrPine, 160, GY, P, seed, 0.85); drawBush(x, 800, GY, P, seed); }
   if (k === 'lake') { if (!P.ice) drawBoat(x, 600, GY + 66, '#c0473f'); drawPier(x, 210, 750, GY); drawReeds(x, 200, GY, P, seed); drawReeds(x, 770, GY, P, seed + 1); inter(480, GY - 70, 'fish'); }
@@ -2956,7 +2973,7 @@ function heroAttack() {
   let best = null, bd = 120; for (const m of mobTargets()) { const d = Math.abs(m.x - p.x); if (d < bd) { bd = d; best = m; } }
   if (best && Math.abs(best.x - p.x) > 6) p.facing = Math.sign(best.x - p.x);
   G.atkCd = w.spd; G.heroAtk = 0.25; G.swingT = 0.22; G.dancing = false; startAtkAnim(s.gear.weapon);
-  if (w.ranged) { if (have('stone') <= 0) { say(L().noAmmo); Audio.sfx('buzz'); return; } take('stone', 1); G.shots.push({ x: p.x + p.facing * 16, y: GY + p.y - 40, vx: p.facing * 620, life: 0.9, dmg: w.dmg }); Audio.sfx('whoosh'); return; }
+  if (w.ranged) { if (have('stone') <= 0) { say(L().noAmmo); Audio.sfx('buzz'); return; } take('stone', 1); G.shots.push(aimShot(w.dmg)); Audio.sfx('whoosh'); return; }
   Audio.sfx('whiff');
   const reach = s.gear.weapon === 'warHammer' || s.gear.weapon === 'obsidianBlade' ? 70 : 62;
   for (const m of mobTargets()) { const def = MOB[m.type], dx = (m.x - p.x) * p.facing, mw = (MOB_W[m.type] || 32) / 2; if (dx > -14 && dx < reach + mw && (m.fly ? Math.abs((GY + p.y - 40) - (GY - (m.alt || 0) - 30)) < 90 : p.y > -110)) damageMob(m, w.dmg, s.gear.weapon); }
@@ -2997,12 +3014,19 @@ function mobAttack(m, dt) {
   if (d < reach && vy < 70 && m.cd <= 0) { m.windT = ai.wind; m.dir = Math.sign(p.x - m.x) || m.dir; return; }
   if (ai.burst && m.aggro && !m.burstT && !m.burstWind && d > 90 && d < 260 && m.cd <= 0 && Math.random() < dt * 0.7) m.burstWind = 0.35;
 }
+// rock thrower: lock onto the closest monster within half a screen and lob the stone at it under normal gravity
+const SHOT_G = 900, SHOT_RANGE = W / 2;
+function aimShot(dmg) { const p = G.p, x0 = p.x + p.facing * 10, y0 = GY + p.y - 44; let best = null, bd = SHOT_RANGE;
+  for (const m of mobTargets()) { if (m.dead || m.hp <= 0) continue; const d = Math.abs(m.x - p.x); if (d < bd && d > 4) { bd = d; best = m; } }
+  if (best) { p.facing = Math.sign(best.x - p.x) || p.facing; const tx = best.x - (best.vx || 0) * 0.05, ty = GY - (best.alt || 0) - 30, dx = tx - x0, T = clamp(Math.abs(dx) / 620, 0.22, 0.85);
+    return { x: x0, y: y0, vx: dx / T, vy: (ty - y0 - 0.5 * SHOT_G * T * T) / T, life: T + 0.6, dmg, aimed: true }; }
+  return { x: x0, y: y0, vx: p.facing * 620, vy: -170, life: 1.6, dmg }; } // nothing in range: a plain lob that drops about half a screen away
 function updateShots(dt) {
-  for (let i = G.shots.length - 1; i >= 0; i--) { const b = G.shots[i]; b.x += b.vx * dt; b.life -= dt; let gone = b.life <= 0;
-    for (const m of mobTargets()) { if (Math.abs(m.x - b.x) < (MOB_W[m.type] || 32) / 2 + 6 && Math.abs((GY - (m.alt || 0) - 30) - b.y) < 60) { damageMob(m, b.dmg, 'rockThrower'); gone = true; break; } }
+  for (let i = G.shots.length - 1; i >= 0; i--) { const b = G.shots[i]; b.x += b.vx * dt; b.vy = (b.vy || 0) + SHOT_G * dt; b.y += b.vy * dt; b.rot = (b.rot || 0) + dt * 14; b.life -= dt; let gone = b.life <= 0 || b.y > GY + 2;
+    for (const m of mobTargets()) { if (Math.abs(m.x - b.x) < (MOB_W[m.type] || 32) / 2 + 6 && Math.abs((GY - (m.alt || 0) - 30) - b.y) < 36) { damageMob(m, b.dmg, 'rockThrower'); gone = true; break; } }
     if (!gone && blockAtPoint(b.x, b.y)) gone = true; if (gone) G.shots.splice(i, 1); }
 }
-function drawShots(camX) { for (const b of G.shots) { R(ctx, b.x - camX - 4, b.y - 4, 8, 8, '#0e0805'); R(ctx, b.x - camX - 3, b.y - 3, 6, 6, '#a9b0b8'); } }
+function drawShots(camX) { for (const b of G.shots) { const X = b.x - camX; ctx.globalAlpha = 0.25; R(ctx, X - b.vx * 0.02 - 2, b.y - (b.vy || 0) * 0.02 - 2, 4, 4, '#ffffff'); ctx.globalAlpha = 1; ctx.save(); ctx.translate(X, b.y); ctx.rotate(b.rot || 0); R(ctx, -4, -4, 8, 8, '#0e0805'); R(ctx, -3, -3, 6, 6, '#a9b0b8'); R(ctx, -3, -3, 3, 2, '#d8dde2'); ctx.restore(); } }
 function drawSlashOld(x, cx, gy, f) { if (!(G.swingT > 0)) return; const a = 1 - G.swingT / 0.22; ctx.save(); ctx.globalAlpha = 0.55 * (1 - a); ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5; ctx.beginPath(); const c0 = f > 0 ? -1.4 : Math.PI + 1.4, c1 = f > 0 ? 0.9 : Math.PI - 0.9; ctx.arc(cx + f * 6, gy - 40, 44, Math.min(c0, c1) + (f > 0 ? 0 : 0), Math.max(c0, c1)); ctx.stroke(); ctx.restore(); }
 
 
@@ -3777,23 +3801,39 @@ function qtPlan(a, e) { const s = G.s, p = G.p, fr = Save.d.lang !== 'en', out =
   const si = seasonInfo(s.clock.day, s.seasonDays), drain = { summer: 1, autumn: 1.05, winter: 1.1, spring: 0.9 }[si.key] * (s.player.hunger > 0.75 ? 1.2 : 1) * 3;
   out.dist = dist; out.t = dist / RUN_PX; out.en = out.t * drain / 750; out.hu = out.t / 600; out.hours = out.t / 300 * 24; out.rings = hops.length;
   if (dist < TW * 0.6) { out.why = fr ? 'Tu y es déjà !' : 'You’re already there!'; return out; }
-  if (s.player.energy - out.en < 0.08) { out.why = fr ? 'Trop épuisé pour un si long trajet. Repose-toi ou mange d’abord.' : 'Too worn out for such a long trip. Rest or eat first.'; return out; }
-  if (s.player.hunger + out.hu > 0.95) { out.why = fr ? 'Trop affamé pour tenir tout le trajet. Mange d’abord !' : 'Too hungry to last the whole way. Eat first!'; return out; }
+  if (s.player.energy - out.en <= 0.005) { out.why = fr ? 'Trop épuisé pour un si long trajet. Repose-toi ou mange d’abord.' : 'Too worn out for such a long trip. Rest or eat first.'; return out; }
+  if (s.player.hunger + out.hu >= 1) { out.why = fr ? 'Trop affamé pour tenir tout le trajet. Mange d’abord !' : 'Too hungry to last the whole way. Eat first!'; return out; }
   out.ok = true; return out; }
-function qtGo(P2) { const s = G.s; G.qt = null; G.panel = null; fadeTo(() => {
+function qtGo(P2) { G.qtView = G.qtView || 'bars'; const s = G.s; G.qt = null; G.panel = null; fadeTo(() => {
     if (G.p.area === 3 && P2.a !== 3) s.inv.snow = 0;
     const p = G.p; p.area = P2.a; p.x = envMidX(P2.a, P2.e); p.y = 0; p.vy = 0; p.vx = 0; p.ground = true; p.runDir = 0; G.inside = false; G.room = null; G.act = null; G.envKey = ''; G.npcs = {}; G.anims = {}; G.mobs = {}; G.eShots = []; G.combat = null; G.boss = null;
     s.player.energy = clamp(s.player.energy - P2.en, 0, 1); s.player.hunger = clamp(s.player.hunger + P2.hu, 0, 1);
     s.clock.sec += P2.t; s.stats.hours += P2.hours; while (s.clock.sec >= 300) { s.clock.sec -= 300; s.clock.day++; } G.lastHour = Math.floor(s.stats.hours);
     TCACHE.clear(); G.miniView = null; Audio.sfx('whoosh'); saveGame(); }, 0.9); }
 function qtHours(h) { const hh = Math.floor(h), mm = Math.round((h - hh) * 60 / 5) * 5; return hh ? hh + ' h' + (mm ? ' ' + String(mm).padStart(2, '0') : '') : mm + ' min'; }
-function qtDialog(metro) { const P2 = G.qt, fr = Save.d.lang !== 'en', s = G.s, w = 420, h = 250, x0 = W / 2 - w / 2 + 140, y0 = H / 2 - h / 2;
+function qtDialog(metro) { const P2 = G.qt, fr = Save.d.lang !== 'en', s = G.s, w = 420, h = 270, x0 = W / 2 - w / 2 + 140, y0 = H / 2 - h / 2;
   hits(0, 0, W, H, () => { }); ctx.fillStyle = 'rgba(10,6,4,0.45)'; ctx.fillRect(0, 0, W, H); panel(x0, y0, w, h);
   text(ctx, fr ? 'Voyage rapide' : 'Quick travel', x0 + 24, y0 + 30, 20, '#ffd23f', 'left', 800);
   drawIco(ctx, envIconKey(P2.a, P2.e), x0 + 44, y0 + 78, 2.2); text(ctx, envLabel(P2.a, P2.e), x0 + 78, y0 + 66, 15, '#f3e6c4', 'left', 800); text(ctx, areaName(P2.a) + (P2.rings ? ' · ' + (fr ? P2.rings + ' passage' + (P2.rings > 1 ? 's' : '') : P2.rings + ' crossing' + (P2.rings > 1 ? 's' : '')) : ''), x0 + 78, y0 + 86, 11, AREA_COL[P2.a] || '#c9b48a', 'left', 800);
   if (P2.t != null) { const rows = [[fr ? 'Durée (comme en courant)' : 'Time (as if running)', qtHours(P2.hours), '#f3e6c4'], [fr ? 'Énergie' : 'Energy', '−' + Math.round(P2.en * 100) + ' %  (' + Math.round(s.player.energy * 100) + ' → ' + Math.max(0, Math.round((s.player.energy - P2.en) * 100)) + ' %)', '#5fcbff'], [fr ? 'Faim' : 'Hunger', '+' + Math.round(P2.hu * 100) + ' %  (' + Math.round(s.player.hunger * 100) + ' → ' + Math.min(100, Math.round((s.player.hunger + P2.hu) * 100)) + ' %)', '#ffb347']];
-    rows.forEach(([k, v, c], i) => { text(ctx, k, x0 + 24, y0 + 118 + i * 22, 12, '#c9b48a', 'left', 700); text(ctx, v, x0 + w - 24, y0 + 118 + i * 22, 13, c, 'right', 800); }); }
-  if (!P2.ok) text(ctx, P2.why, x0 + w / 2, y0 + 188, 12, '#ff8a6a', 'center', 800);
+    if (Input.hit('view')) { G.qtView = G.qtView === 'num' ? 'bars' : 'num'; Audio.sfx('click'); }
+    { const tx = x0 + w - 104, ty = y0 + 14, num = G.qtView === 'num'; R(ctx, tx, ty, 80, 22, '#1a120c'); R(ctx, tx + (num ? 40 : 0), ty, 40, 22, '#ffd23f');
+      for (let k = 0; k < 4; k++) R(ctx, tx + 8 + k * 6, ty + 14 - k * 2, 4, 4 + k * 2, num ? '#c9b48a' : '#2a1b12'); text(ctx, '123', tx + 60, ty + 11, 11, num ? '#2a1b12' : '#c9b48a', 'center', 900);
+      hits(tx, ty, 80, 22, () => { G.qtView = num ? 'bars' : 'num'; Audio.sfx('click'); }); text(ctx, 'Tab', tx - 6, ty + 11, 9, '#8a7a5a', 'right', 700); }
+    { // the time on top, then energy and hunger as the real bars (the slice that will change breathes) or as numbers
+      text(ctx, rows[0][0], x0 + 24, y0 + 118, 12, '#c9b48a', 'left', 700); text(ctx, rows[0][1], x0 + w - 24, y0 + 118, 13, '#f3e6c4', 'right', 800);
+      const pulse = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(G.t * 4)), BX = x0 + 126, BW = w - 150, SEG = 20;
+      const bar = (y, ico, now, after, col, dCol, label) => { if (ico === 'energy') bolt(x0 + 24, y - 3); else drum(x0 + 20, y - 5); text(ctx, label, x0 + 50, y + 7, 12, '#c9b48a', 'left', 700);
+        if (G.qtView === 'num') { const d = Math.round((after - now) * 100); text(ctx, (d > 0 ? '+' : '−') + Math.abs(d) + ' %   ' + Math.round(now * 100) + ' → ' + clamp(Math.round(after * 100), 0, 100) + ' %', x0 + w - 24, y + 7, 13, dCol === '#ff6a5a' ? '#ff8a6a' : ico === 'energy' ? '#5fcbff' : '#ffb347', 'right', 800); return; }
+        R(ctx, BX - 2, y - 2, BW + 4, 18, '#0e0805'); R(ctx, BX, y, BW, 14, '#2a1b12');
+        const a = clamp(Math.min(now, after), 0, 1), b = clamp(Math.max(now, after), 0, 1); R(ctx, BX, y, BW * a, 14, col); R(ctx, BX, y, BW * a, 3, 'rgba(255,255,255,.35)');
+        ctx.globalAlpha = pulse; R(ctx, BX + BW * a, y, BW * (b - a), 14, dCol); ctx.globalAlpha = 1;
+        ctx.strokeStyle = dCol; ctx.lineWidth = 1.5; ctx.setLineDash([3, 2]); ctx.strokeRect(BX + BW * a + 0.5, y + 0.5, Math.max(1, BW * (b - a) - 1), 13); ctx.setLineDash([]);
+        for (let k = 1; k < SEG; k++) R(ctx, BX + BW * k / SEG, y, 1, 14, 'rgba(14,8,5,.55)'); };
+      bar(y0 + 140, 'energy', s.player.energy, s.player.energy - P2.en, '#3aa8e8', s.player.energy - P2.en > 0.15 ? '#bfe8ff' : '#ff6a5a', fr ? 'Énergie' : 'Energy');
+      bar(y0 + 166, 'hunger', s.player.hunger, s.player.hunger + P2.hu, '#5ed16a', P2.hu + s.player.hunger > 0.75 ? '#ff6a5a' : '#ffd23f', fr ? 'Faim' : 'Hunger'); } }
+  if (P2.ok && P2.t != null && (s.player.energy - P2.en < 0.15 || s.player.hunger + P2.hu > 0.85)) text(ctx, fr ? 'Tu arriveras à bout de forces — prudence là-bas !' : 'You’ll arrive running on empty — careful out there!', x0 + w / 2, y0 + 200, 12, '#ffd23f', 'center', 800);
+  if (!P2.ok) text(ctx, P2.why, x0 + w / 2, y0 + 200, 12, '#ff8a6a', 'center', 800);
   const bw = 170, by = y0 + h - 50; G.qtI = P2.ok ? (G.qtI == null ? 0 : G.qtI) : 1; if (Input.hit('left') || Input.hit('right')) G.qtI = P2.ok ? 1 - G.qtI : 1;
   [[fr ? 'Partir' : 'Go', 0, P2.ok], [fr ? 'Annuler' : 'Cancel', 1, true]].forEach(([lb, i, on]) => { const X = x0 + 24 + i * (bw + 32), sel = G.qtI === i; R(ctx, X, by, bw, 34, !on ? '#3b2a20' : sel ? '#ffd23f' : '#5a3b24'); text(ctx, lb, X + bw / 2, by + 17, 15, !on ? '#6a5a44' : sel ? '#2a1b12' : '#f3e6c4', 'center', 800); if (on) hits(X, by, bw, 34, () => { if (i === 0) qtGo(P2); else G.qt = null; Audio.sfx('click'); }); });
   if (Input.hit('confirm') || Input.hit('use') || Input.hit('space')) { if (G.qtI === 0 && P2.ok) qtGo(P2); else G.qt = null; Audio.sfx('click'); }

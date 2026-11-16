@@ -186,8 +186,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.11.2';
+const VERSION = '1.12.0';
 const CHANGELOG = [
+  { v: '1.12.0', k: 'xff', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Exporter fonctionne dans la page de jeu sur claude.ai : la page te demande de confirmer, puis le fichier se télécharge.', 'Carte du monde : chaque quête ouverte a son emoji, posé à côté de l’endroit où elle se passe, dès que tu as découvert cet endroit. Les quêtes de chasse (loups, spectres, sangliers, pierres savantes) restent sans repère.', 'Choisis un endroit sur la carte pour voir la liste de ses quêtes ; la quête suivie à l’écran brille en jaune. Le journal et la ligne sous la carte montrent aussi l’emoji.'],
+    en: ['Export works in the play page on claude.ai: the page asks you to confirm, then the file downloads.', 'World map: every open quest has its own emoji, shown beside the place where it happens once you have discovered that place. Hunting quests (wolves, wraiths, boars, scholar’s stones) stay unmarked.', 'Pick a place on the map to see its quests listed; the quest shown on screen glows yellow. The journal and the line under the map wear the emoji too.'] },
   { v: '1.11.2', k: 'b', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
     fr: ['Le Grand Siège plafonne vraiment à 10 monstres par nuit (un réglage le remontait à 14 quand tu étais à la maison).'],
     en: ['The Great Siege really caps at 10 monsters a night (a leftover setting raised it back to 14 when you were home).'] },
@@ -478,9 +481,9 @@ Object.assign(STR.en, { crowStole: 'The crow stole my {x}!', tabSleeping: 'The s
 Object.assign(STR.fr.items, { shellArmor: ['Armure de carapace', 'Arrête la moitié des coups de lame et des coups contondants.'] });
 Object.assign(STR.en.items, { shellArmor: ['Shell armour', 'Stops half of blade and blunt damage.'] });
 Object.assign(STR.fr, { trollFriend: 'Le troll te fait un clin d’œil.' }); Object.assign(STR.en, { trollFriend: 'The troll winks at you.' });
-Object.assign(STR.fr, { mimicWake: 'Le coffre ouvre une bouche pleine de dents !', golemTough: 'Trop dur ! Une lame de métal (qui perce) ou un gros marteau aiderait.', iceFishT: 'Je pêche sous la glace…', iceFishHint: 'En hiver, on pêche par un trou dans la glace !', tentHint: 'Fatigué loin de chez toi ? Plante ta tente (F) et dors : une nuit te remet sur pied.', tentHint2: 'Fatigué loin de chez toi ? Fabrique une tente (four amélioré) pour dormir n’importe où.' });
+Object.assign(STR.fr, { exportNo: 'Export annulé.', exportOff: 'L’export n’est pas possible ici.', mimicWake: 'Le coffre ouvre une bouche pleine de dents !', golemTough: 'Trop dur ! Une lame de métal (qui perce) ou un gros marteau aiderait.', iceFishT: 'Je pêche sous la glace…', iceFishHint: 'En hiver, on pêche par un trou dans la glace !', tentHint: 'Fatigué loin de chez toi ? Plante ta tente (F) et dors : une nuit te remet sur pied.', tentHint2: 'Fatigué loin de chez toi ? Fabrique une tente (four amélioré) pour dormir n’importe où.' });
 Object.assign(STR.fr, { newQuest: 'Nouvelle quête', pageWritten: 'Une nouvelle page s’est écrite…', journalT: 'Journal', survivalNoQuests: 'Mode Survie : pas de quêtes, seulement survivre !', laneF: 'Le Foyer', laneP: 'Les Profondeurs', laneL: 'Le Large', laneC: 'Les Climats', pagesT: '{n} / {t} pages', boardT: 'Panneau du village', boardEmpty: 'Rien d’affiché pour l’instant.', needGold: 'Il faut 1 or.', coachTo: 'Coche vers', storyL: 'Mon Histoire', pedlarL: 'Colporteur', trollShop: 'Le troll a des marchandises rares.', hamlet: 'Le hameau', libraryName: 'La Bibliothèque engloutie', libWater: 'L’eau monte !', libOut: 'L’eau t’a emporté dehors… reviens demain.', libDone: 'La bibliothèque a livré son secret.', libClosed: 'L’eau est trop haute aujourd’hui.', journalKey: 'J : journal', campfireL: 'Feu de camp', benchL: 'Établi de campagne' });
-Object.assign(STR.en, { mimicWake: 'The chest opens a mouth full of teeth!', golemTough: 'Too tough! A metal blade (it pierces) or a big hammer would help.', iceFishT: 'Ice fishing…', iceFishHint: 'In winter you fish through a hole in the ice!', tentHint: 'Tired far from home? Pitch your tent (F) and sleep: one night puts you right.', tentHint2: 'Tired far from home? Craft a tent (upgraded oven) to sleep anywhere.' });
+Object.assign(STR.en, { exportNo: 'Export cancelled.', exportOff: 'Export isn’t available here.', mimicWake: 'The chest opens a mouth full of teeth!', golemTough: 'Too tough! A metal blade (it pierces) or a big hammer would help.', iceFishT: 'Ice fishing…', iceFishHint: 'In winter you fish through a hole in the ice!', tentHint: 'Tired far from home? Pitch your tent (F) and sleep: one night puts you right.', tentHint2: 'Tired far from home? Craft a tent (upgraded oven) to sleep anywhere.' });
 Object.assign(STR.en, { newQuest: 'New quest', pageWritten: 'A new page has been written…', journalT: 'Journal', survivalNoQuests: 'Survival mode: no quests, just survive!', laneF: 'Home', laneP: 'The Depths', laneL: 'The Far Shore', laneC: 'The Lands', pagesT: '{n} / {t} pages', boardT: 'Village notice board', boardEmpty: 'Nothing posted for now.', needGold: 'You need 1 gold.', coachTo: 'Coach to', storyL: 'My Story', pedlarL: 'Pedlar', trollShop: 'The troll has rare goods.', hamlet: 'The hamlet', libraryName: 'The Sunken Library', libWater: 'The water is rising!', libOut: 'The water washed you out… come back tomorrow.', libDone: 'The library gave up its secret.', libClosed: 'The water is too high today.', journalKey: 'J: journal', campfireL: 'Campfire', benchL: 'Field bench' });
 Object.assign(STR.fr, { warmFire: 'Au chaud près du feu', huntEscaped: 'Il s’est échappé !', carcassLeft: 'La carcasse reste là… à finir avant qu’elle ne pourrisse.', carcRot: 'Dépeçage (avarié)', gotMeat: 'Récolte :', gotRotten: 'Pouah, c’est avarié :', ateRotten: 'Beurk… ça cale, mais ça fatigue.' });
 Object.assign(STR.fr.items, { rotten: ['Viande avariée', 'Calme un peu la faim, mais te fait perdre de l’énergie. Impossible à cuisiner.'] });
@@ -3254,9 +3257,53 @@ function qTracked() { const s = G.s; if (!story() || !s.q) return null; if (s.tr
   for (const q of QUESTS) { const r = s.q[q.id]; if (!r || r.st !== 'open') continue; if (q.lane === 'X') return q.id; if (!best && lanes.includes(q.lane)) best = q.id; }
   if (best) return best; const any = QUESTS.find((q) => s.q[q.id] && s.q[q.id].st === 'open'); return any ? any.id : null; }
 function qTrack(id) { G.s.track = id; Audio.sfx('click'); G.qToast = { text: (QEN() ? 'On screen: ' : 'À l’écran : ') + qName(QMAP[id]), t: 2 }; }
+const QEMO = { F1: '🛏️', F2: '🤝', F3: '🪵', F4: '🧰', F5: '📦', F6: '🍲', F7: '🧱', F8: '🐺', F9: '🛒', F10: '🏚️', F11: '🗼', F12: '🎉', F13: '🐦', F14: '⛺', E1: '🏰',
+  P1: '🏮', P2: '⛏️', P3: '🕳️', P4: '🗿', P5: '👺', P6: '🔢', P7: '🎶', P8: '🕹️', P9: '🐉', P10: '✅', P11: '🔦', P12: '📖', P13: '😬', E2: '📚',
+  L1: '🧌', L2: '🚶', L3: '🐺', L4: '👻', L5: '🏕️', L6: '🗡️', L7: '🪙', L8: '🗺️', L9: '🗝️', L10: '🧥', L11: '⛄', L12: '🦀', L13: '🐗', L14: '🎣', L15: '🌉', L16: '🛡️', L17: '🧊', E3: '👑',
+  C1: '🔱', C2: '🧴', C3: '🌋', C4: '🪨', C5: '😈', C6: '🌬️', C7: '🌉', C8: '🪶', C9: '🪺', C10: '⚒️', C11: '🎵', C12: '💥', C13: '🦇', E4: '🔥', FIN: '🐚' };
+function qEmo(q) { return QEMO[q.id] || '◆'; }
+// places [area, env] a quest points at; quests you have to hunt for (wolves, wraiths, boars, stones, crafting) have none
+function qPlaces(q) { const W = G.world, out = [], A0 = W.areas[0], A1 = W.areas[1], s = G.s;
+  const envT = (A, ti) => (A && A.terrains[ti] ? A.terrains[ti].env : -1), add = (a, e) => { if (e >= 0 && !out.some((p) => p[0] === a && p[1] === e)) out.push([a, e]); };
+  const vills = (a) => { const A = W.areas[a]; if (A) A.envs.forEach((en, e) => { if (en.type === 'village') add(a, e); }); };
+  const caves = (pick) => { for (const a of [0, 1]) { const A = W.areas[a]; if (A) A.terrains.forEach((t, ti) => { if (t.cave && (!pick || forcedSecret(a, ti) === pick)) add(a, t.env); }); } };
+  const land = (a, kind) => { const A = W.areas[a]; if (A) A.envs.forEach((en, e) => { if (en.kind === kind) add(a, e); }); };
+  switch (q.id) {
+    case 'F1': case 'F4': case 'F6': case 'F7': case 'F11': case 'P8': case 'E1': case 'FIN': add(0, homeEnv()); break;
+    case 'F2': case 'F3': case 'F5': case 'F9': case 'F10': vills(0); break;
+    case 'F13': add(0, envT(A0, crowTerrain(W))); break;
+    case 'P2': case 'P3': case 'P5': case 'P13': caves(null); break;
+    case 'P7': caves('juke'); break;
+    case 'P9': caves('dragon'); break;
+    case 'E2': add(1, envT(A1, libraryTerrain(W))); break;
+    case 'L1': case 'L7': if (A0.crossT >= 0) add(0, envT(A0, A0.crossT)); break;
+    case 'L2': if (A1) add(1, A1.envs.findIndex((e) => e.type === 'arrival')); break;
+    case 'L5': case 'L6': add(1, envT(A1, campTerrain(W))); break;
+    case 'L8': if (A1) { A1.envs.forEach((en, e) => { if (en.type === 'village' && !(s.visitedV && s.visitedV['1:' + e])) add(1, e); }); if (!(s.visitedV && s.visitedV['1:hamlet'])) add(1, envT(A1, 0)); } break;
+    case 'L9': if (A1) add(1, A1.envs.length - 1); add(3, 0); break;
+    case 'L11': land(3, 'igloo'); break;
+    case 'L12': add(1, envT(A1, crabTerrain(W))); break;
+    case 'L14': land(3, 'icehole'); break;
+    case 'L15': add(1, envT(A1, 1)); break;
+    case 'E3': land(3, 'icehall'); break;
+    case 'C1': land(3, 'fork'); break;
+    case 'C2': case 'C3': land(4, 'lava'); break;
+    case 'C4': land(4, 'rock'); break;
+    case 'C5': case 'C12': land(4, 'ash'); break;
+    case 'C6': case 'C7': case 'C8': land(5, 'isle'); break;
+    case 'C9': land(5, 'nest'); break;
+    case 'C10': land(4, 'badv'); break;
+    case 'C11': case 'C13': land(5, 'ruins'); break;
+    case 'E4': land(4, 'emberArena'); land(5, 'windArena'); break;
+  }
+  return out; }
+// open quests grouped by the discovered place they point at: "a:e" -> [quest]
+function questMarks() { const s = G.s, out = {}; if (!story() || !s.q) return out;
+  for (const q of QUESTS) { const r = s.q[q.id]; if (!r || r.st !== 'open') continue; for (const [a, e] of qPlaces(q)) { if (!isDisc(a, e)) continue; (out[a + ':' + e] = out[a + ':' + e] || []).push(q); } }
+  return out; }
 // the line under the minimap: the quest you are on, how far along, and a tap opens the journal on it
 function drawQuestTracker() { if (!story() || G.credits || G.cab) return; const id = qTracked(); if (!id) return; const q = QMAP[id], r = G.s.q[id], need = qNeed(q);
-  const y = TB + 8 + (G.miniH || 0) + (G.climH || 0), head = '◆ ' + qName(q) + (need > 1 ? '  ' + r.n + ' / ' + need : ''), sub = fitText(qText(q), 300, 11, 600);
+  const y = TB + 8 + (G.miniH || 0) + (G.climH || 0), head = qEmo(q) + ' ' + qName(q) + (need > 1 ? '  ' + r.n + ' / ' + need : ''), sub = fitText(qText(q), 300, 11, 600);
   ctx.font = '700 13px ' + FONT; const hw = ctx.measureText(head).width; ctx.font = '600 11px ' + FONT; const w = Math.min(332, Math.max(hw, ctx.measureText(sub).width) + 22);
   ctx.globalAlpha = 0.92; R(ctx, 16, y, w, 38, '#0e0805'); R(ctx, 18, y + 2, w - 4, 34, q.lane === 'X' ? '#3a2a10' : '#2a1b12'); ctx.globalAlpha = 1;
   text(ctx, head, 26, y + 12, 13, '#ffd23f', 'left', 700); text(ctx, sub, 26, y + 27, 11, '#e8dcc0', 'left', 600);
@@ -3329,7 +3376,7 @@ function journalPanel() {
     hits(x0 + 28, Y, w - 56, RH - 4, () => { if (G.jSel === i && r && r.st === 'open') qTrack(q.id); G.jSel = i; Audio.sfx('click'); });
     if (!r) { text(ctx, qNo(q) + ' · ???', x0 + 42, Y + 12, 14, ink || '#6a5a44', 'left', 700); text(ctx, fitText('🔒 ' + lockHint(q), w - 150, 12), x0 + 42, Y + 28, 12, ink || '#8a7a5a', 'left', 500); return; }
     const need = qNeed(q), prog = r.st === 'open' && need > 1 ? '  (' + r.n + ' / ' + need + ')' : '';
-    text(ctx, (r.st === 'done' ? '✓ ' : '◆ ') + qNo(q) + ' · ' + qName(q) + (q.id === track ? '   ⌖' : ''), x0 + 42, Y + 12, 14, ink || (r.st === 'done' ? '#9adf8a' : isFin ? '#ffd77a' : '#ffd23f'), 'left', 700);
+    text(ctx, (r.st === 'done' ? '✓ ' : qEmo(q) + ' ') + qNo(q) + ' · ' + qName(q) + (q.id === track ? '   ⌖' : ''), x0 + 42, Y + 12, 14, ink || (r.st === 'done' ? '#9adf8a' : isFin ? '#ffd77a' : '#ffd23f'), 'left', 700);
     ctx.font = '500 12px ' + FONT; const pw = ctx.measureText(prog).width; text(ctx, fitText(qText(q), w - 150 - pw, 12) + prog, x0 + 42, Y + 28, 12, ink || '#e8dcc0', 'left', 500); });
   if (qs.length > ROWS) { const bx = x0 + w - 62; R(ctx, bx, y0 + 100, 26, 20, G.jScroll > 0 ? '#5a3b24' : '#2e1f15'); text(ctx, '▲', bx + 13, y0 + 110, 11, '#f3e6c4', 'center', 800); hits(bx - 4, y0 + 96, 34, 28, () => { G.jSel = Math.max(0, G.jSel - ROWS); Audio.sfx('move'); });
     R(ctx, bx, y0 + 98 + ROWS * RH - 26, 26, 20, G.jScroll < qs.length - ROWS ? '#5a3b24' : '#2e1f15'); text(ctx, '▼', bx + 13, y0 + 98 + ROWS * RH - 16, 11, '#f3e6c4', 'center', 800); hits(bx - 4, y0 + 98 + ROWS * RH - 30, 34, 28, () => { G.jSel = Math.min(qs.length - 1, G.jSel + ROWS); Audio.sfx('move'); }); }
@@ -3963,6 +4010,7 @@ function mapPanel() {
         text(ctx, l1, LX + 96, by + 8, sz, ink, 'left', 900); text(ctx, l2, LX + 96, by + 8 + sz + 2, sz, ink, 'left', 900); } }
     text(ctx, areaName(sel.a), LX + 96, by + 42, 11, AREA_COL[sel.a] || soft, 'left', 800);
     text(ctx, (fr ? 'découvert le jour ' : 'found on day ') + s.disc[sel.a + ':' + sel.e], LX + 96, by + 60, 11, soft, 'left', 700);
+    { const mq = questMarks()[sel.a + ':' + sel.e]; if (mq) text(ctx, fitText(mq.map((q) => qEmo(q) + ' ' + qName(q)).join(' · '), LW - 40, 11, 800), LX + 20, by + 76, 11, metro ? '#1f6a7d' : '#7a3a1a', 'left', 800); }
     const nb = envBlocks(sel.a, sel.e).length; text(ctx, nb ? (fr ? nb + ' blocs construits ici' : nb + ' blocks built here') : (fr ? 'rien de construit ici' : 'nothing built here'), LX + 20, by + 92, 11, soft, 'left', 700);
     const here = G.p.area === sel.a && G.world.areas[sel.a].terrains[clamp(Math.floor(G.p.x / TW), 0, G.world.areas[sel.a].terrains.length - 1)].env === sel.e && !G.inside;
     if (!here && sel.a !== 2) { const bx = LX + 20, bw = LW - 40, byy = by + 100; R(ctx, bx, byy, bw, 26, metro ? '#1a1a2a' : '#5a3b24'); text(ctx, (fr ? '➜ Voyage rapide' : '➜ Quick travel') + (Input.padOn ? ' (✕)' : ' (Entrée)'.replace('Entrée', fr ? 'Entrée' : 'Enter')), bx + bw / 2, byy + 13, 12, '#ffd23f', 'center', 800); hits(bx, byy, bw, 26, () => { G.qt = qtPlan(sel.a, sel.e); G.qtI = null; Audio.sfx('click'); });
@@ -4023,6 +4071,13 @@ function mapPanel() {
   // where you are: an X (a dot on the Metro). When the selected place is where you stand, the X itself pulses instead of a second circle.
   const hereN = G.p.area !== 2 && T0 && nodes[G.p.area] && nodes[G.p.area][T0.env] ? { a: G.p.area, e: T0.env, p: nodes[G.p.area][T0.env] } : null, selHere = !!hereN && sel.a === hereN.a && sel.e === hereN.e;
   if (!selHere && nodes[sel.a] && nodes[sel.a][sel.e]) { const q = toScr(nodes[sel.a][sel.e].x, nodes[sel.a][sel.e].y); ctx.strokeStyle = metro ? '#ffd23f' : '#c0302a'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(q.x, q.y, (13 + Math.sin(G.t * 4)) * Math.min(1.5, Z.z), 0, 7); ctx.stroke(); }
+  { const marks = questMarks(), tr = qTracked(), u = Math.min(1.4, 0.85 + (Z.z - 1) * 0.2), fs = Math.round(13 * u);
+    for (const key in marks) { const [a, e] = key.split(':').map(Number), p = nodes[a] && nodes[a][e]; if (!p) continue; const q = toScr(p.x, p.y); if (q.x < VX || q.x > VX + VW || q.y < VY || q.y > VY + VH) continue;
+      const list = marks[key], shown = list.slice(0, 4), more = list.length - shown.length, lab = shown.map(qEmo).join('') + (more > 0 ? '+' + more : ''), hot = list.some((qq) => qq.id === tr);
+      ctx.font = '700 ' + fs + 'px ' + FONT; const tw = ctx.measureText(lab).width + 10 * u, bx = q.x - tw / 2, by2 = q.y - (metro ? 26 : 30) * u - fs;
+      ctx.fillStyle = metro ? '#1a1a2a' : '#3b2618'; ctx.beginPath(); ctx.roundRect(bx - 1.5, by2 - 1.5, tw + 3, fs + 9 * u, 7 * u); ctx.fill();
+      ctx.fillStyle = hot ? '#ffd23f' : metro ? '#ffffff' : '#fbf1d8'; ctx.beginPath(); ctx.roundRect(bx, by2, tw, fs + 6 * u, 6 * u); ctx.fill();
+      ctx.fillStyle = '#2a1b12'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(lab, q.x, by2 + (fs + 6 * u) / 2 + 1); ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; } }
   if (hereN) { const q = toScr(hereN.p.x, hereN.p.y), pul = selHere ? 1 + 0.22 * Math.sin(G.t * 4) : 1, u = Math.min(1.5, Z.z) * pul, cy = metro ? q.y : q.y + 14 * Math.min(1.5, Z.z);
     if (selHere) { ctx.globalAlpha = 0.5 + 0.25 * Math.sin(G.t * 4); ctx.fillStyle = metro ? 'rgba(255,210,63,0.55)' : 'rgba(255,236,200,0.85)'; ctx.beginPath(); ctx.arc(q.x, cy, 11 * u, 0, 7); ctx.fill(); ctx.globalAlpha = 1; }
     if (metro) { ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 5 * Math.min(1.3, u); ctx.beginPath(); ctx.arc(q.x, cy, 8 * u, 0, 7); ctx.stroke(); ctx.strokeStyle = '#e2302a'; ctx.lineWidth = 3 * Math.min(1.3, u); ctx.stroke(); }
@@ -5009,10 +5064,12 @@ function specialDraw(rm, dt) {
     }
   }
 }
+let DL = null; try { if (window.claude && window.claude.use) window.claude.use('downloads').then((d) => { DL = d; }, () => {}); } catch (e) { DL = null; }
 function exportSave() {
-  const Lx = L(); saveGame(); const s = G.s;
+  const Lx = L(); saveGame(); const s = G.s, fname = 'mine-moule-' + (s.name || 'save').replace(/[^\w-]+/g, '_') + '-' + s.clock.day + '.json';
+  if (DL) { DL.save({ filename: fname, data: JSON.stringify({ mineMoule: VERSION, slot: s }) }).then(() => say(Lx.exported), (e) => say(e && e.code === 'declined' ? Lx.exportNo : Lx.exportOff)); return; }
   try { const blob = new Blob([JSON.stringify({ mineMoule: VERSION, slot: s })], { type: 'application/json' }), a = document.createElement('a');
-    a.href = URL.createObjectURL(blob); a.download = 'mine-moule-' + (s.name || 'save').replace(/[^\w-]+/g, '_') + '-' + s.clock.day + '.json'; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    a.href = URL.createObjectURL(blob); a.download = fname; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
     say(Lx.exported); } catch (e) { say(Lx.importBad); }
 }
 function importSave() {

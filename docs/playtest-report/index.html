@@ -157,100 +157,176 @@ figcaption b{color:var(--ink)}
 @media (max-width:760px){.untested{grid-template-columns:1fr}}
 </style>
 
+<style>
+.duo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.persona{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.persona .who{font:600 .75rem/1 var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.persona h3{font-size:1.25rem}
+.persona .bigp{font:800 3rem/1 var(--f-display);letter-spacing:-.03em}
+.persona .bigp small{font-size:.38em;font-weight:500;color:var(--muted);letter-spacing:0}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.92rem}
+.kv span:nth-child(odd){color:var(--muted)}
+.kv span:nth-child(even){font-variant-numeric:tabular-nums;font-weight:700}
+.curve{display:flex;flex-direction:column;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:18px}
+.crow2{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center;font-size:.9rem}
+.cbars{display:flex;flex-direction:column;gap:3px}
+.cbar{display:grid;grid-template-columns:minmax(0,1fr) 46px;gap:8px;align-items:center}
+.cbar .tr{height:10px;background:var(--bg);border-radius:2px;position:relative}
+.cbar .fl{position:absolute;inset:0 auto 0 0;border-radius:2px}
+.cbar .v{font:600 .75rem var(--f-mono);text-align:right;font-variant-numeric:tabular-nums}
+.c-cas{background:var(--warn)}.c-walk{background:var(--crit)}.c-hard{background:var(--slate)}
+.helps{font:600 .66rem/1 var(--f-mono);padding:4px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.06em;border:1px solid var(--line);color:var(--muted)}
+.helps.cas{background:var(--warn-soft);color:var(--warn);border-color:transparent}
+.helps.hard{background:var(--bg);color:var(--slate)}
+.note{border-left:3px solid var(--ore);padding:10px 14px;background:var(--panel);font-size:.92rem;color:var(--muted);border-radius:0 6px 6px 0}
+.note b{color:var(--ink)}
+@media (max-width:760px){.duo{grid-template-columns:1fr}.crow2{grid-template-columns:84px minmax(0,1fr)}}
+</style>
 <div class="wrap">
 <header>
-  <span class="eyebrow">Playtest · build 1.14.0</span>
+  <span class="eyebrow">Playtest · build 1.14.0 · two kinds of players</span>
   <h1>Mine-Moule Playtest Report</h1>
-  <p class="lede">Where the game stands, from 288 simulated playthroughs of 1.12.1 and a census of 256 generated worlds. Every problem those runs found has since been fixed in 1.14.0; the next simulated run will confirm it.</p>
+  <p class="lede">288 simulated playthroughs: 144 by young first-timers playing casually, 144 by hardcore young adults. Same 72 worlds for both, so every difference comes from how they play.</p>
   <div class="meta">
-    <span class="chip">288 simulated runs · 2 bots</span>
-    <span class="chip">256-world census</span>
-    <span class="chip">62 quests</span>
-    <span class="chip">FR + EN</span>
+    <span class="chip">144 casual · gentle mode · maths 1–3</span>
+    <span class="chip">144 hardcore · normal mode · maths 5–6</span>
+    <span class="chip">3 world types · 8 seeds · 3 season lengths</span>
   </div>
 </header>
 
 <section aria-labelledby="h-head">
-  <div class="headline">
-    <div>
-      <span class="eyebrow" id="h-head">Can the story be finished?</span>
-      <div class="big">Yes<small> · 141 / 144 runs</small></div>
-      <p class="lede" style="margin-top:10px">A player who knows the map reaches the ending in nearly every world. The three misses were deaths, not missing quests. A player who only follows the hints finishes 58 of 144, and every failure is a death in the late game.</p>
-      <div class="seam" id="seam" aria-hidden="true" style="grid-template-columns:repeat(24,1fr)"></div>
-      <div class="legend"><span><b style="background:var(--ore)"></b>knows the map: finished</span><span><b style="background:var(--crit)"></b>died before the end</span></div>
-    </div>
-    <div class="stats">
-      <div class="stat"><span class="n">51 / 72</span><span class="l">hint-following runs finished in gentle mode</span></div>
-      <div class="stat"><span class="n">7 / 72</span><span class="l">hint-following runs finished in normal mode</span></div>
-      <div class="stat"><span class="n">0</span><span class="l">quests lost by doing them too early</span></div>
-      <div class="stat"><span class="n">37 min</span><span class="l">spent searching per run (was 56)</span></div>
-    </div>
+  <span class="eyebrow" id="h-head">Can they finish?</span>
+  <h2>Both can. The children only if they use quick travel.</h2>
+  <div class="duo">
+    <article class="persona">
+      <span class="who">Young first-timers · about 7–10</span>
+      <div class="bigp">137<small> / 144 finish</small></div>
+      <div class="kv">
+        <span>If they never quick-travel</span><span style="color:var(--crit)">58 / 144 finish</span>
+        <span>Deaths (median)</span><span>7, plus 20 faints</span>
+        <span>Ending reached</span><span>day 130</span>
+        <span>Real playing time (guess)</span><span>about 9–15 hours</span>
+        <span>Runs with 3+ deaths on one quest</span><span>49 / 144</span>
+      </div>
+    </article>
+    <article class="persona">
+      <span class="who">Hardcore young adults</span>
+      <div class="bigp">144<small> / 144 finish</small></div>
+      <div class="kv">
+        <span>Deaths (median)</span><span>0</span>
+        <span>Ending reached</span><span>day 65</span>
+        <span>Real playing time (guess)</span><span>about 2–3 hours</span>
+        <span>Bosses beaten without being hit</span><span>17–42 %</span>
+        <span>Runs with a 5+ day wait</span><span>116 / 144</span>
+      </div>
+    </article>
+  </div>
+  <p class="qnote">No run failed for a structural reason: every quest exists and can be done in every world.</p>
+</section>
+
+<section aria-labelledby="h-curve">
+  <span class="eyebrow">Difficulty curve</span>
+  <h2 id="h-curve">Flat to the Far Shore, then a cliff for children</h2>
+  <p class="lede">Deaths per quest per run, by land. The two bosses at the end of the Lands are where young players hit a wall; hardcore players barely notice any of it.</p>
+  <div class="curve" id="curve"></div>
+  <div class="legend"><span><b class="c-cas" style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px"></b>casual</span><span><b class="c-walk" style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px"></b>casual who never quick-travels</span><span><b class="c-hard" style="display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px"></b>hardcore</span></div>
+</section>
+
+<section aria-labelledby="h-cas">
+  <span class="eyebrow">Young first-timers</span>
+  <h2 id="h-cas">Where children struggle</h2>
+  <div style="overflow-x:auto"><table class="tbl">
+    <thead><tr><th>#</th><th>Where</th><th>What happens</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>Embers and Winds</b> (two bosses)</td><td>1.9 deaths per run; 40 runs die 3+ times; all 5 hard stops</td><td>Two long fights inside heat or wind; the climate drains them mid-fight</td></tr>
+      <tr><td>2</td><td><b>Walking through the Frozen North</b></td><td>About 3.5 deaths per run, on the way to the later Lands</td><td>The North is the only road to both later Lands; walking it in the cold is deadly, quick travel skips the cold</td></tr>
+      <tr><td>3</td><td><b>Imps</b> (C5)</td><td>The longest quest: about 7 active days, the most faints</td><td>Heat plus flying monsters that are hard to hit</td></tr>
+      <tr><td>4</td><td><b>Stubborn boars</b> (L13)</td><td>5.6 active days; a stall in almost every run</td><td>No marker and a chancy mechanic: boring, not dangerous</td></tr>
+      <tr><td>5</td><td><b>Gargoyles</b> (C13)</td><td>About 4 active days</td><td>Night only, and tough</td></tr>
+      <tr><td>6</td><td><b>Great Siege</b> (E1)</td><td>4 active days, many faints</td><td>Children don’t build towers or forts</td></tr>
+      <tr><td>7</td><td><b>Cook 3 dishes</b> (F6)</td><td>The slowest 10 % take almost 4 weeks</td><td>Chicken and pork appear only in some trade lists; fish needs the rod first</td></tr>
+      <tr><td>8</td><td><b>Wind cloak</b> (C6)</td><td>4 active days</td><td>The bottle chain while the wind drains you</td></tr>
+      <tr><td>9</td><td><b>Waiting at home</b> (F5, F11, F12, F14)</td><td>3–4 days each</td><td>Nothing to do but wait</td></tr>
+      <tr><td>10</td><td><b>Snowmen</b> (L11) and <b>wraiths</b> (L4)</td><td>Repeated deaths to snowmen; wraiths only at night</td><td>Nothing says snowmen re-form unless smashed with a hammer</td></tr>
+    </tbody></table></div>
+  <div class="duo">
+    <div class="note"><b>What worked.</b> Map markers: the camp, library, crabs and caves needed almost no searching (about 34 minutes per run in total). “Already done!” fired all the time and no quest was lost.</div>
+    <div class="note"><b>What didn’t.</b> Quests with no fixed place (boars, wraiths) are the biggest time sinks. Gentle mode is enough for fights and the siege, but not for the cold, heat and wind on foot: climate caused 3 out of 4 child deaths.</div>
   </div>
 </section>
 
-<section aria-labelledby="h-issues">
-  <span class="eyebrow">Open problems</span>
-  <h2 id="h-issues">None known · all 13 fixed in 1.14.0</h2>
-  <p class="lede">Each problem the 1.12.1 runs found shipped a fix. None of these fixes has been simulated yet.</p>
-  <div style="overflow-x:auto"><table class="tbl">
-    <thead><tr><th>Problem in 1.12.1</th><th>Fix in 1.14.0</th></tr></thead>
-    <tbody>
-      <tr><td><b>“The Goblin” impossible in 1 world in 330</b></td><td>A goblin waits at the end of every cave while the quest is open</td></tr>
-      <tr><td><b>Normal-mode Lands too hard</b> (7 of 72 hint-following runs finished)</td><td>Lands start at 1.3× and climb to 1.7× (were 1.6× to 2.25×)</td></tr>
-      <tr><td><b>Great Siege deadliest and slowest</b></td><td>8 monsters a night; a night that doesn’t count says why</td></tr>
-      <tr><td><b>Flask chicken-and-egg</b></td><td>The Frozen North trader sells 2 salamander scales for 1 fur and 1 metal</td></tr>
-      <tr><td><b>Sunken library spike</b></td><td>Stones at grade + 1; the flood rule is explained on the first visit</td></tr>
-      <tr><td><b>Village fair: 7 days of waiting</b></td><td>4 days at most</td></tr>
-      <tr><td><b>Mining 5 ore slow in 27 % of worlds</b></td><td>At least 2 ore veins per cave; goblin ore counts</td></tr>
-      <tr><td><b>3-day respawn in the Lands</b></td><td>Lands monsters return after 1 day</td></tr>
-      <tr><td><b>Boar stuns and the igloo unclear</b></td><td>How-to text in the quest</td></tr>
-      <tr><td><b>Siege night rule hidden</b></td><td>In the quest text, and a message after a night that didn’t count</td></tr>
-      <tr><td><b>Library flood rule unexplained</b></td><td>Message on the first visit</td></tr>
-      <tr><td><b>Silent completions on opening</b></td><td>“Already done!” message</td></tr>
-      <tr><td><b>Long wind-cloak chain</b></td><td>The sky village sells a bottle for 1 metal</td></tr>
-    </tbody></table></div>
-</section>
-
-<section aria-labelledby="h-progress">
-  <span class="eyebrow">Progress</span>
-  <h2 id="h-progress">Since the first playtest</h2>
-  <p class="lede">The same 288 runs on 1.10.4 and on 1.12.1. The comparison is reliable because both use the same model.</p>
-  <div style="overflow-x:auto"><table class="tbl">
-    <thead><tr><th>Measure</th><th>Knows the map<br>1.10.4 → 1.12.1</th><th>Follows hints<br>1.10.4 → 1.12.1</th></tr></thead>
-    <tbody>
-      <tr><td>Reached the ending</td><td>0 → <b>141</b> of 144</td><td>0 → <b>58</b> of 144</td></tr>
-      <tr><td>Median quests done (of 62)</td><td>58 → <b>62</b></td><td>48 → <b>60</b></td></tr>
-      <tr><td>Median day reaching the Far Shore</td><td>4 → 4</td><td>55 → <b>40</b></td></tr>
-      <tr><td>Median day the Frost King falls</td><td>47.5 → 49.5</td><td>115 → <b>103</b></td></tr>
-      <tr><td>Median deaths per run</td><td>16 → 19</td><td>19 → 23</td></tr>
-    </tbody></table></div>
-  <p class="qnote">Deaths went up because the Lands got harder in 1.11; 1.14.0 brings them back down.</p>
-</section>
-
-<section aria-labelledby="h-untested">
-  <span class="eyebrow">Not yet tested</span>
-  <h2 id="h-untested" style="font-size:1.3rem">Shipped after the rerun</h2>
-  <p class="qnote">Recommended next step: rerun the 288 simulated playthroughs on 1.14.0.</p>
-  <div class="untested">
-    <div><b>The 13 fixes above (1.14.0)</b>Checked one by one in the game; their effect on whole runs is not measured yet.</div>
-    <div><b>Crow nests (1.13.0)</b>Thieves fly to a nest you raid with a jump-strike. Checked by hand, not in the simulation.</div>
-    <div><b>Double light in caves (1.12.2)</b>Lantern plus headlamp underground. Visual change only.</div>
-    <div><b>Export in claude.ai (1.12.0)</b>Needs one real export from the play link to confirm the prompt.</div>
-    <div><b>Esc in full screen (1.12.1)</b>Holding Esc in Chrome with the file opened locally can't be tested here.</div>
+<section aria-labelledby="h-hard">
+  <span class="eyebrow">Hardcore players</span>
+  <h2 id="h-hard">Too easy, with a few shortcuts that break it</h2>
+  <div class="duo">
+    <div class="note"><b>Too easy.</b> Zero deaths in a typical run. The Lord of Embers and the Queen of Winds land about one hit per fight. The golem, yeti and walrus go hitless about 3 times in 4. A fort makes the Great Siege trivial.</div>
+    <div class="note"><b>Grindy.</b> Waiting, not fighting: the village fair (4 days), the Great Siege (three nights), wraiths at night only, imps, gargoyles, feathers and the wind cloak at 2.5–3 days each.</div>
   </div>
+  <div style="overflow-x:auto"><table class="tbl">
+    <thead><tr><th>Shortcut</th><th>What it breaks</th></tr></thead>
+    <tbody>
+      <tr><td><b>Quick travel ignores the climate</b></td><td>Outfits barely matter for anyone who always quick-travels; it is also what saves the children</td></tr>
+      <tr><td><b>Troll: 2 gold → 1 silver</b></td><td>The dominant silver source, used 3 times per run</td></tr>
+      <tr><td><b>Market: 2 metal → 3 fish</b></td><td>Replaces fishing entirely</td></tr>
+      <tr><td><b>Village: 2 wood → 3 stone</b></td><td>Replaces gathering stone</td></tr>
+      <tr><td><b>Cross to the Far Shore on day 1–2</b></td><td>Allowed by design; “Already done!” completes the bridge quest later</td></tr>
+      <tr><td><b>Forts for the siege</b></td><td>The Great Siege costs almost nothing</td></tr>
+    </tbody></table></div>
+</section>
+
+<section aria-labelledby="h-recs">
+  <span class="eyebrow">Recommendations</span>
+  <h2 id="h-recs">Ten fixes, by impact</h2>
+  <p class="qnote" id="qnote">Tick the fixes you want and copy the list back to Claude.</p>
+  <div class="cards" id="cards"></div>
 </section>
 
 <section aria-labelledby="h-method">
   <span class="eyebrow">How this was made</span>
   <h2 id="h-method" style="font-size:1.2rem">Method and confidence</h2>
   <div class="method">
-    <div><b>World census</b>All 256 seeds built with the game’s own code; every quest target checked to exist in every world.</div>
-    <div><b>Simulated runs</b>3 world types × 8 seeds × 3 season lengths × gentle on/off, played by a bot that knows the map and one that explores and follows the journal.</div>
-    <div><b>Confidence</b>Before/after changes are solid. Absolute death counts are not: fights are rolled with dice, and about half of the explorer’s deaths happen while starving in a rough food model.</div>
+    <div><b>Young first-timers</b>Gentle mode, maths 1–3. Follow the journal but pick a random quest a third of the time, use markers, quick-travel half the time, fight clumsily, eat late, skip sleep, build only when asked.</div>
+    <div><b>Hardcore players</b>Normal mode, maths 5–6. Near-perfect routing, strong fighting, weaknesses and best weapons, forts for sieges, early crossing, always quick-travel.</div>
+    <div><b>Confidence</b>Solid: finishability, the climate-on-foot effect, comparisons between lands, trade use. Medium: days per quest, the “too easy” verdict. Low: exact child death counts, which range from 3 to 12 with kinder or harsher fighting.</div>
   </div>
+  <div class="note"><b>Two corrections.</b> Running out of energy makes you faint and wake up later; it isn’t a death. Earlier reports counted faints as deaths, so their death numbers were too high and can’t be compared with these. Also, the Lands reach 2× from about day 35 because of the weekly bump, not the 1.7× the 1.14.0 changelog says.</div>
 </section>
 </div>
 
+<div class="tray" id="tray" hidden>
+  <span id="trayN">0 fixes picked</span>
+  <button id="copy">Copy picked list</button>
+  <button class="ghost" id="clear">Clear</button>
+</div>
+
 <script>
-let h='';for(let i=0;i<144;i++)h+=`<i class="${i>=141?'x':''}"></i>`;document.getElementById('seam').innerHTML=h;
+const CURVE=[['Home',0.02,0.02,0],['Caves',0,0,0],['Far Shore',0.01,0.01,0],['Frozen North',0.15,0.18,0.01],['Badlands',0.28,0.69,0],['Sky Islands',0.33,0.64,0.05],['Two bosses',1.90,4.42,0.04],['The Heart',0.16,0.06,0.01]];
+const MAXC=4.5;
+document.getElementById('curve').innerHTML=CURVE.map(([n,c,w,h])=>`<div class="crow2"><span>${n}</span><div class="cbars">${[['c-cas',c],['c-walk',w],['c-hard',h]].map(([k,v])=>`<div class="cbar"><div class="tr"><div class="fl ${k}" style="width:${Math.max(v>0?1:0,v/MAXC*100)}%"></div></div><span class="v">${v.toFixed(2)}</span></div>`).join('')}</div></div>`).join('');
+const I=[
+ {id:'P1',sev:'major',h:['cas','hard'],t:'Make the climate fair and consistent',ev:'Climate caused 3 in 4 child deaths on foot, and quick travel skips it entirely, which is also the biggest hardcore shortcut.',fix:'Apply climate during quick travel too (or refuse quick travel into a Land without its outfit). In gentle mode, cut climate to 0.3×. Add warm or shady rest spots along the Frozen North road.'},
+ {id:'P2',sev:'major',h:['cas'],t:'Soften the two bosses in gentle mode',ev:'Embers and Winds: 1.9 child deaths per run and every hard stop.',fix:'Gentle mode only: bosses at about 70 % health, no climate inside boss arenas, and a breather between the two fights.'},
+ {id:'P3',sev:'major',h:['hard'],t:'A real challenge for normal mode',ev:'Hardcore players die zero times; bosses land about one hit.',fix:'Normal mode: Lands back to about 1.6–2.0×, and bosses get a second phase or a new attack pattern.'},
+ {id:'P4',sev:'major',h:['cas'],t:'Markers for hunting quests after a first sighting',ev:'Boars, wraiths, gargoyles and imps have no marker and are the biggest child time sinks.',fix:'Once you have seen one, mark where it was, or show tracks pointing to the nearest place.'},
+ {id:'P5',sev:'minor',h:['cas','hard'],t:'Cut the waits',ev:'Wraiths and gargoyles only at night, 6 imps, a 4-day fair: the slowest quests for both kinds of player.',fix:'Wraiths and gargoyles also at dusk, 4 imps, fair 2–3 days.'},
+ {id:'P6',sev:'minor',h:['cas'],t:'Explain snowmen',ev:'Children keep dying to snowmen that re-form.',fix:'Add to the igloo-village quest: “Snowmen re-form unless smashed with a hammer.”'},
+ {id:'P7',sev:'minor',h:['cas'],t:'Make cooking 3 dishes reliable',ev:'The slowest 10 % of children take almost 4 weeks on F6.',fix:'Every village offers one chicken or pork trade, or vegetable soup counts as a dish.'},
+ {id:'P8',sev:'minor',h:['hard'],t:'Limit the dominant trades',ev:'Troll silver, market fish and wood-to-stone replace whole activities.',fix:'Troll silver once a day, market fish 3 a day, wood-to-stone limited per visit.'},
+ {id:'P9',sev:'minor',h:['cas','hard'],t:'Give sieges variety',ev:'Forts make the siege trivial for experts; children never build them.',fix:'A strong fort brings flyers or sappers; gentle mode sieges at 5 monsters a night.'},
+ {id:'P10',sev:'minor',h:['hard'],t:'Reward the early crossing',ev:'Crossing on day 1–2 is allowed and silently completes the bridge quest later.',fix:'Keep it allowed, and add a small “Pathfinder” badge when you do it.'}
+];
+const HL={cas:'young players',hard:'hardcore'};
+const st={pick:new Set()};
+try{const s=JSON.parse(localStorage.getItem('mm-report3')||'{}');if(s.pick)st.pick=new Set(s.pick.filter(id=>I.some(i=>i.id===id)))}catch(e){}
+const save=()=>{try{localStorage.setItem('mm-report3',JSON.stringify({pick:[...st.pick]}))}catch(e){}};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const cards=document.getElementById('cards');
+function render(){cards.innerHTML=I.map((i,n)=>`<article class="card${st.pick.has(i.id)?' on':''}" data-id="${i.id}"><div class="top"><div class="tags"><span class="pill ${i.sev}">${n+1}</span>${i.h.map(k=>`<span class="helps ${k}">helps ${HL[k]}</span>`).join('')}</div><h3>${esc(i.t)}</h3><p class="ev">${esc(i.ev)}</p></div><details><summary>Suggested fix</summary><div class="fix"><p>${esc(i.fix)}</p></div></details><div class="foot"><span class="effort">${i.id}</span><label class="pick"><input type="checkbox" id="pk-${i.id}" ${st.pick.has(i.id)?'checked':''}> Fix this</label></div></article>`).join('');tray();}
+cards.addEventListener('change',e=>{const c=e.target.closest('.card');if(!c)return;const id=c.dataset.id;e.target.checked?st.pick.add(id):st.pick.delete(id);c.classList.toggle('on',e.target.checked);save();tray()});
+function tray(){const n=st.pick.size;document.getElementById('tray').hidden=!n;document.getElementById('trayN').textContent=n+(n===1?' fix picked':' fixes picked')}
+document.getElementById('clear').addEventListener('click',()=>{st.pick.clear();save();render()});
+document.getElementById('copy').addEventListener('click',async e=>{const txt='Mine-Moule fixes to implement:\n'+I.filter(i=>st.pick.has(i.id)).map(i=>`- ${i.id} ${i.t} → ${i.fix}`).join('\n');const b=e.currentTarget;
+  try{await navigator.clipboard.writeText(txt);b.textContent='Copied'}catch(err){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='Copied'}catch(_){b.textContent='Select failed'}ta.remove()}
+  setTimeout(()=>b.textContent='Copy picked list',1600);});
+render();
 </script>

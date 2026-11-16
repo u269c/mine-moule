@@ -157,7 +157,7 @@ figcaption b{color:var(--ink)}
     <span class="chip">FR + EN text checked</span>
     <span class="chip">29 monsters</span>
     <span class="chip">288 simulated playthroughs</span>
-    <span class="chip pending">Fixed in 1.11.0 · 256 / 256 worlds finishable</span>
+    <span class="chip pending">Rerun on 1.12.1 · 141 / 144 perfect runs finish</span>
   </div>
 </header>
 
@@ -250,6 +250,31 @@ figcaption b{color:var(--ink)}
   <div class="sim">
     <h3>Re-check after 1.11.0</h3>
     <p>The same 256 worlds, built by the game’s own code, now all contain every quest target: camp, library, crabs, crow, beetles, imps, sprites, harpies, gargoyles, golem, snowmen, music-box room, dragon room and a mimic. 0 blocked, 0 page errors.</p>
+  </div>
+</section>
+
+<section aria-labelledby="h-rerun">
+  <span class="eyebrow">Rerun · build 1.12.1</span>
+  <h2 id="h-rerun">The same 288 runs, after the fixes</h2>
+  <p class="lede">Same grid, same two bots, same model as the 1.10.4 run. The bot that knows the map now reaches the ending in almost every world; the explorer that only follows hints finishes a third of the time, and every one of its failures is a death, not a missing quest.</p>
+  <div class="tw" style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;font-size:.92rem;background:var(--panel);border:1px solid var(--line)">
+    <thead><tr style="text-align:left"><th style="padding:8px 10px">Measure</th><th style="padding:8px 10px">Efficient 1.10.4</th><th style="padding:8px 10px">Efficient 1.12.1</th><th style="padding:8px 10px">Explorer 1.10.4</th><th style="padding:8px 10px">Explorer 1.12.1</th></tr></thead>
+    <tbody style="font-variant-numeric:tabular-nums">
+      <tr><td style="padding:6px 10px">Reached the ending</td><td>0 / 144</td><td><b>141 / 144</b></td><td>0 / 144</td><td><b>58 / 144</b> (gentle 51, normal 7)</td></tr>
+      <tr><td style="padding:6px 10px">Median quests done of 62</td><td>58</td><td><b>62</b></td><td>48</td><td><b>60</b></td></tr>
+      <tr><td style="padding:6px 10px">Median day on the Far Shore</td><td>4</td><td>4</td><td>55</td><td><b>40</b></td></tr>
+      <tr><td style="padding:6px 10px">Median day the Frost King falls</td><td>47.5</td><td>49.5</td><td>115</td><td><b>103</b></td></tr>
+      <tr><td style="padding:6px 10px">Median deaths</td><td>16</td><td>19</td><td>19</td><td>23</td></tr>
+      <tr><td style="padding:6px 10px">Quests lost by doing them early</td><td>0</td><td>0</td><td>135 runs</td><td><b>0</b></td></tr>
+      <tr><td style="padding:6px 10px">Search time per run</td><td>—</td><td>—</td><td>56 min</td><td><b>37 min</b></td></tr>
+    </tbody></table></div>
+  <div class="sim">
+    <h3>What is left</h3>
+    <p><b>Normal-mode Lands are too hard for a child.</b> The explorer finished 7 of 72 normal runs against 51 of 72 in gentle mode; Lands quests got 15–85 % deadlier at 1.6–2.25×. Fix: lower the Lands to about 1.3–1.7×, or let gentle mode also halve the ring multiplier.</p>
+    <p><b>The Great Siege is still the deadliest and slowest quest</b> (about 4 deaths per run, 8.5 active days), even at 10 per night. Fix: 8 per night, or a bonus for towers and spikes.</p>
+    <p><b>The flask is a chicken-and-egg:</b> you hunt salamanders in the heat to make the heat protection. Fix: sell scales or a flask at the Frozen North trader, or no heat on the first lava tile.</p>
+    <p><b>The village fair still idles about 7 days.</b> <b>The sunken library</b> is a spike (7 answers at grade + 2 with wraiths at 2×). <b>One world in 330 has no goblin</b> in either cave, so P5 can't be done. <b>P2 is slow</b> in 27 % of worlds with few ore nodes. <b>The 3-day respawn</b> still gates imps, gargoyles and sprites. <b>Boar stuns and the igloo</b> need a how-to line. <b>Quests that complete on opening do it silently.</b></p>
+    <p style="color:var(--muted)">Confidence: the before/after comparison is solid because both runs use the same model. Absolute death counts are not: combat is a dice model and about half of explorer deaths happen while starving in a crude food model.</p>
   </div>
 </section>
 

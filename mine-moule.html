@@ -186,8 +186,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.11.1';
+const VERSION = '1.11.2';
 const CHANGELOG = [
+  { v: '1.11.2', k: 'b', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Le Grand Siège plafonne vraiment à 10 monstres par nuit (un réglage le remontait à 14 quand tu étais à la maison).'],
+    en: ['The Great Siege really caps at 10 monsters a night (a leftover setting raised it back to 14 when you were home).'] },
   { v: '1.11.1', k: 'x', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
     fr: ['Correctif : une partie sauvegardée avant la 1.11 restait sur un écran noir au chargement. Elle se charge de nouveau, et les quêtes déjà remplies se valident au réveil.'],
     en: ['Fix: a game saved before 1.11 stayed on a black screen when loaded. It loads again, and quests you had already done complete when you wake up.'] },
@@ -4153,7 +4156,7 @@ function updateSiege(si, tm) {
 }
 function bedSleep() {
   const s = G.s, Lx = L(), day = s.clock.day;
-  if (!s.siege || s.siege.day !== day) startSiege(day, true); s.siege.atHome = true; if (qOpen('E1')) { s.siege.n = 14; rebuildSiege(); }
+  if (!s.siege || s.siege.day !== day) startSiege(day, true); s.siege.atHome = true; if (qOpen('E1')) { s.siege.n = 10; rebuildSiege(); }
   const alive = s.siege.n - s.siege.killed.length;
   if (alive > 0) s.siege.hit = true;
   sleepFor(8, () => { s.player.energy = 1; }, Lx.sleep);

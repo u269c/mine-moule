@@ -37,6 +37,13 @@ Open `mine-moule.html` in Chrome (desktop or phone). No build step, no install. 
 - A "My Story" book that writes an illustrated page for every finished quest
 - 20 songs from the Kick la Banane music engine, in many arrangements
 
+## Docs
+
+- [Implementation plan](docs/implementation-plan.html): the original design and build plan, with the decisions behind it
+- [Playtest report](docs/playtest-report/index.html): findings from a 256-world census and 288 simulated playthroughs of 1.10.4, with the fixes shipped in 1.11.0
+
+Open them in a browser after cloning (GitHub shows HTML files as source).
+
 ## Credits
 
 Idea and world: Francis and family. Code, art and pages: Claude.

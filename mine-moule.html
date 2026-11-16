@@ -190,8 +190,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.12.2';
+const VERSION = '1.13.0';
 const CHANGELOG = [
+  { v: '1.13.0', k: 'fix', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Corbeaux voleurs : celui qui te vole file vers un vrai nid, perché sur un arbre mort tout près. Le nid est trop haut pour frapper du sol : saute et frappe (ou monte sur une tour). Trois coups et il tombe : tu récupères tout ce qu’il contenait, et ça compte pour « Le nid du voleur ».', 'Les corbeaux volent : un conseil s’affiche la première fois — saute et frappe en l’air pour les toucher. Le nid apparaît sur la carte quand « Le nid du voleur » est ouverte.', 'Journal : le compteur dit « quêtes faites » au lieu de « pages ».'],
+    en: ['Thief crows: the one that robs you flies to a real nest, perched on a dead tree nearby. The nest is too high to hit from the ground: jump and strike (or climb a tower). Three hits and it falls: you get back everything in it, and it counts for “The Thief’s Nest”.', 'Crows fly: a tip shows the first time — jump and strike in the air to hit them. The nest shows on the map while “The Thief’s Nest” is open.', 'Journal: the counter says “quests done” instead of “pages”.'] },
   { v: '1.12.2', k: 'i', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
     fr: ['Grottes : avec la lampe frontale, double lumière ! La lanterne éclaire autour de toi et le faisceau de la lampe porte loin devant, dans la direction où tu regardes.'],
     en: ['Caves: with the headlamp, double the light! The lantern lights up around you and the headlamp beam reaches far ahead, in the direction you face.'] },
@@ -491,10 +494,10 @@ Object.assign(STR.en, { crowStole: 'The crow stole my {x}!', tabSleeping: 'The s
 Object.assign(STR.fr.items, { shellArmor: ['Armure de carapace', 'Arrête la moitié des coups de lame et des coups contondants.'] });
 Object.assign(STR.en.items, { shellArmor: ['Shell armour', 'Stops half of blade and blunt damage.'] });
 Object.assign(STR.fr, { trollFriend: 'Le troll te fait un clin d’œil.' }); Object.assign(STR.en, { trollFriend: 'The troll winks at you.' });
-Object.assign(STR.fr, { exportNo: 'Export annulé.', exportOff: 'L’export n’est pas possible ici.', mimicWake: 'Le coffre ouvre une bouche pleine de dents !', golemTough: 'Trop dur ! Une lame de métal (qui perce) ou un gros marteau aiderait.', iceFishT: 'Je pêche sous la glace…', iceFishHint: 'En hiver, on pêche par un trou dans la glace !', tentHint: 'Fatigué loin de chez toi ? Plante ta tente (F) et dors : une nuit te remet sur pied.', tentHint2: 'Fatigué loin de chez toi ? Fabrique une tente (four amélioré) pour dormir n’importe où.' });
-Object.assign(STR.fr, { newQuest: 'Nouvelle quête', pageWritten: 'Une nouvelle page s’est écrite…', journalT: 'Journal', survivalNoQuests: 'Mode Survie : pas de quêtes, seulement survivre !', laneF: 'Le Foyer', laneP: 'Les Profondeurs', laneL: 'Le Large', laneC: 'Les Climats', pagesT: '{n} / {t} pages', boardT: 'Panneau du village', boardEmpty: 'Rien d’affiché pour l’instant.', needGold: 'Il faut 1 or.', coachTo: 'Coche vers', storyL: 'Mon Histoire', pedlarL: 'Colporteur', trollShop: 'Le troll a des marchandises rares.', hamlet: 'Le hameau', libraryName: 'La Bibliothèque engloutie', libWater: 'L’eau monte !', libOut: 'L’eau t’a emporté dehors… reviens demain.', libDone: 'La bibliothèque a livré son secret.', libClosed: 'L’eau est trop haute aujourd’hui.', journalKey: 'J : journal', campfireL: 'Feu de camp', benchL: 'Établi de campagne' });
-Object.assign(STR.en, { exportNo: 'Export cancelled.', exportOff: 'Export isn’t available here.', mimicWake: 'The chest opens a mouth full of teeth!', golemTough: 'Too tough! A metal blade (it pierces) or a big hammer would help.', iceFishT: 'Ice fishing…', iceFishHint: 'In winter you fish through a hole in the ice!', tentHint: 'Tired far from home? Pitch your tent (F) and sleep: one night puts you right.', tentHint2: 'Tired far from home? Craft a tent (upgraded oven) to sleep anywhere.' });
-Object.assign(STR.en, { newQuest: 'New quest', pageWritten: 'A new page has been written…', journalT: 'Journal', survivalNoQuests: 'Survival mode: no quests, just survive!', laneF: 'Home', laneP: 'The Depths', laneL: 'The Far Shore', laneC: 'The Lands', pagesT: '{n} / {t} pages', boardT: 'Village notice board', boardEmpty: 'Nothing posted for now.', needGold: 'You need 1 gold.', coachTo: 'Coach to', storyL: 'My Story', pedlarL: 'Pedlar', trollShop: 'The troll has rare goods.', hamlet: 'The hamlet', libraryName: 'The Sunken Library', libWater: 'The water is rising!', libOut: 'The water washed you out… come back tomorrow.', libDone: 'The library gave up its secret.', libClosed: 'The water is too high today.', journalKey: 'J: journal', campfireL: 'Campfire', benchL: 'Field bench' });
+Object.assign(STR.fr, { crowHint: 'Les corbeaux volent : saute et frappe en l’air pour les toucher !', crowNest: 'Le corbeau file vers son nid ! Suis-le : saute et frappe le nid (ou monte sur une tour).', nestHigh: 'Trop haut ! Saute et frappe, ou bâtis une petite tour.', nestBack: 'Le nid tombe ! Tu récupères :', exportNo: 'Export annulé.', exportOff: 'L’export n’est pas possible ici.', mimicWake: 'Le coffre ouvre une bouche pleine de dents !', golemTough: 'Trop dur ! Une lame de métal (qui perce) ou un gros marteau aiderait.', iceFishT: 'Je pêche sous la glace…', iceFishHint: 'En hiver, on pêche par un trou dans la glace !', tentHint: 'Fatigué loin de chez toi ? Plante ta tente (F) et dors : une nuit te remet sur pied.', tentHint2: 'Fatigué loin de chez toi ? Fabrique une tente (four amélioré) pour dormir n’importe où.' });
+Object.assign(STR.fr, { newQuest: 'Nouvelle quête', pageWritten: 'Une nouvelle page s’est écrite…', journalT: 'Journal', survivalNoQuests: 'Mode Survie : pas de quêtes, seulement survivre !', laneF: 'Le Foyer', laneP: 'Les Profondeurs', laneL: 'Le Large', laneC: 'Les Climats', pagesT: '{n} / {t} quêtes faites', boardT: 'Panneau du village', boardEmpty: 'Rien d’affiché pour l’instant.', needGold: 'Il faut 1 or.', coachTo: 'Coche vers', storyL: 'Mon Histoire', pedlarL: 'Colporteur', trollShop: 'Le troll a des marchandises rares.', hamlet: 'Le hameau', libraryName: 'La Bibliothèque engloutie', libWater: 'L’eau monte !', libOut: 'L’eau t’a emporté dehors… reviens demain.', libDone: 'La bibliothèque a livré son secret.', libClosed: 'L’eau est trop haute aujourd’hui.', journalKey: 'J : journal', campfireL: 'Feu de camp', benchL: 'Établi de campagne' });
+Object.assign(STR.en, { crowHint: 'Crows fly: jump and strike in the air to hit them!', crowNest: 'The crow is heading for its nest! Follow it: jump and strike the nest (or climb a tower).', nestHigh: 'Too high! Jump and strike, or build a little tower.', nestBack: 'The nest falls! You get back:', exportNo: 'Export cancelled.', exportOff: 'Export isn’t available here.', mimicWake: 'The chest opens a mouth full of teeth!', golemTough: 'Too tough! A metal blade (it pierces) or a big hammer would help.', iceFishT: 'Ice fishing…', iceFishHint: 'In winter you fish through a hole in the ice!', tentHint: 'Tired far from home? Pitch your tent (F) and sleep: one night puts you right.', tentHint2: 'Tired far from home? Craft a tent (upgraded oven) to sleep anywhere.' });
+Object.assign(STR.en, { newQuest: 'New quest', pageWritten: 'A new page has been written…', journalT: 'Journal', survivalNoQuests: 'Survival mode: no quests, just survive!', laneF: 'Home', laneP: 'The Depths', laneL: 'The Far Shore', laneC: 'The Lands', pagesT: '{n} / {t} quests done', boardT: 'Village notice board', boardEmpty: 'Nothing posted for now.', needGold: 'You need 1 gold.', coachTo: 'Coach to', storyL: 'My Story', pedlarL: 'Pedlar', trollShop: 'The troll has rare goods.', hamlet: 'The hamlet', libraryName: 'The Sunken Library', libWater: 'The water is rising!', libOut: 'The water washed you out… come back tomorrow.', libDone: 'The library gave up its secret.', libClosed: 'The water is too high today.', journalKey: 'J: journal', campfireL: 'Campfire', benchL: 'Field bench' });
 Object.assign(STR.fr, { warmFire: 'Au chaud près du feu', huntEscaped: 'Il s’est échappé !', carcassLeft: 'La carcasse reste là… à finir avant qu’elle ne pourrisse.', carcRot: 'Dépeçage (avarié)', gotMeat: 'Récolte :', gotRotten: 'Pouah, c’est avarié :', ateRotten: 'Beurk… ça cale, mais ça fatigue.' });
 Object.assign(STR.fr.items, { rotten: ['Viande avariée', 'Calme un peu la faim, mais te fait perdre de l’énergie. Impossible à cuisiner.'] });
 Object.assign(STR.en.items, { rotten: ['Spoiled meat', 'Eases hunger a little but drains your energy. Can’t be cooked.'] });
@@ -1942,7 +1945,7 @@ function renderWorld(o) {
     if (T.smoke && !(T.cIn && o.inside)) { for (let k = 0; k < 6; k++) { const ph = (G.t * 0.35 + k / 6) % 1, sx = T.smoke[0] + ox + Math.sin(ph * 6 + k) * 6 + ph * 20, sy = T.smoke[1] - ph * 90; const a = (1 - ph) * 0.55; landX.globalAlpha = a; disc(landX, sx, sy, 4 + ph * 10, '#d8d8de'); landX.globalAlpha = 1; } }
   }
   if (o.blocks) { for (const b of o.blocks) { const sx = b.x - o.camX; if (sx > -40 && sx < W + 8) { drawBlock(landX, sx, GY - (b.row + 1) * 32, b.mat, b.hp / BLOCK_HP[b.mat], b.x * 7 + b.row); drawBind(landX, sx, GY - (b.row + 1) * 32, b); } } for (const f of (o.falling || [])) drawBlock(landX, f.x - o.camX, f.y, f.mat, 1, f.x); }
-  if (!o.inside && G.s && o.area === G.p.area) drawHarvFx(o);
+  if (!o.inside && G.s && o.area === G.p.area) { drawHarvFx(o); drawNests(o); }
   if (o.npcsOn) { drawCarcasses(o); drawAnimals(vis, o); drawNpcs(vis, o); } if (!o.inside && o.mobsOn) drawGuards(o);
   G.mobEyes = []; if (o.mobsOn) for (const m of visibleMobs()) { const sx = m.x - o.camX; if (sx > -90 && sx < W + 90) drawMonster(landX, sx, GY - Math.round(m.alt || 0), m, G.mobEyes); }
   if (o.hero) o.hero(landX);
@@ -2950,7 +2953,7 @@ function killMob(m) {
   if (def.boss) { if (m.type === 'mussel') { m.hp = 1; return; } bossKilled(m); }
   if (m.type === 'sprite' && have('bottle') > 0) { take('bottle', 1); setTimeout(() => gain('windb', 1), 300); }
   recordBeast(m.type); emitQ('kill', { mob: m.type, tower: G.p.y <= -64 });
-  if (m.stolen) setTimeout(() => { if (G.s === s) gain(m.stolen, 1); }, 300);
+  if (m.stolen) { setTimeout(() => { if (G.s === s) gain(m.stolen, 1); }, 300); const nest = m.nestId && s.nests && s.nests[m.nestId]; if (nest && nest.items[m.stolen]) { nest.items[m.stolen]--; if (!Object.values(nest.items).some((n) => n > 0)) delete s.nests[m.nestId]; } }
   if (m.type === 'chief') { s.keys = s.keys || {}; s.keys.ironKey = 1; s.chiefDone = 1; TCACHE.clear(); setTimeout(() => { say(Lx.chiefKey); jingle(['C5', 'G5', 'C6']); }, 500); }
   if (m.type === 'mimic') setTimeout(() => { if (G.s === s) treasure(Math.max(2, ringOf(G.p.area, m.x) + 1), 2); }, 400);
   G.poofs.push({ wx: m.x, t: 0 }); Audio.sfx('poof'); floatText(m.x, GY - def.head - 16, Lx.won, '#5ed16a');
@@ -3011,7 +3014,31 @@ function heroAttack() {
   Audio.sfx('whiff');
   const reach = s.gear.weapon === 'warHammer' || s.gear.weapon === 'obsidianBlade' ? 70 : 62;
   for (const m of mobTargets()) { const def = MOB[m.type], dx = (m.x - p.x) * p.facing, mw = (MOB_W[m.type] || 32) / 2; if (dx > -14 && dx < reach + mw && (m.fly ? Math.abs((GY + p.y - 40) - (GY - (m.alt || 0) - 30)) < 90 : p.y > -110)) damageMob(m, w.dmg, s.gear.weapon); }
+  if (!G.inside && s.nests) for (const id in s.nests) { const n = s.nests[id]; if (n.area !== p.area) continue; const dx = (n.x - p.x) * p.facing; if (dx < -14 || dx > reach + 20) continue;
+    if (Math.abs((GY + p.y - 40) - (GY - NEST_ALT)) > 62) { if (!G.nestLow || G.t - G.nestLow > 4) { G.nestLow = G.t; say(L().nestHigh); } continue; }
+    n.hp = (n.hp == null ? 3 : n.hp) - 1; G.shake = Math.max(G.shake || 0, 0.12); Audio.sfx('hit'); (G.sparks = G.sparks || []).push({ wx: n.x, y: GY - NEST_ALT, t: 0, seed: Math.random() * 99, col: '#d8b47a', big: true });
+    if (n.hp <= 0) { const got = []; for (const k in n.items) if (n.items[k] > 0) { gain(k, n.items[k]); got.push(n.items[k] + ' ' + iname(k).toLowerCase()); } G.poofs.push({ wx: n.x, t: 0 }); delete s.nests[id]; say(L().nestBack + (got.length ? ' ' + got.join(', ') : '')); jingle(['E5', 'G5', 'C6']); emitQ('kill', { mob: 'crow', nest: 1 }); TCACHE.clear(); }
+    else floatText(n.x, GY - NEST_ALT - 20, n.hp + ' / 3', '#ffd23f'); }
 }
+// thief crow nests: high up on a dead tree in a nearby place, holding whatever the crows took
+const NEST_ALT = 150;
+function crowNest(m) { const s = G.s, A = G.world.areas[m.area]; s.nests = s.nests || {}; for (const id in s.nests) if (s.nests[id].area === m.area && Math.abs(s.nests[id].x - m.x) < TW * 3) return s.nests[id];
+  const dir = Math.sign(m.x - G.p.x) || 1, ti0 = Math.floor(m.x / TW), len = A.terrains.length, ok = (ti) => ti >= 1 && ti < len - 1 && !A.terrains[ti].cave && !A.terrains[ti].crossing && !(m.area === 1 && ti === 1);
+  let ti = -1; for (const d of [1, 2, 3]) { const c = ti0 + dir * d; if (ok(c) && A.terrains[c].kind === 'forest') { ti = c; break; } }
+  if (ti < 0) for (const d of [1, 2, -1, -2]) { const c = ti0 + dir * d; if (ok(c)) { ti = c; break; } } if (ti < 0) ti = clamp(ti0, 1, len - 2);
+  const id = 'n' + m.area + '_' + ti; return (s.nests[id] = { id, area: m.area, x: ti * TW + 700, items: {}, hp: 3 }); }
+function drawNests(o) { const s = G.s; if (!s.nests) return; for (const id in s.nests) { const n = s.nests[id]; if (n.area !== o.area) continue; const sx = Math.round(n.x - o.camX); if (sx < -90 || sx > W + 90) continue; const x = landX, ny = GY - NEST_ALT, ol = '#0e0805', bk = '#4e3c2a', bh = '#6e5840';
+  // a crooked dead tree: the trunk leans a little as it rises, with bare forked branches
+  for (let yy = GY; yy > ny + 4; yy -= 4) { const t = (GY - yy) / NEST_ALT, lean = Math.round(Math.sin(t * 2.4) * 6), w = Math.round(14 - t * 6); R(x, sx + lean - w / 2 - 2, yy - 4, w + 4, 4, ol); R(x, sx + lean - w / 2, yy - 4, w, 4, bk); R(x, sx + lean - w / 2 + 2, yy - 4, 2, 4, bh); }
+  for (const [y0, dir, l] of [[46, -1, 34], [78, 1, 30], [104, -1, 22], [24, 1, 18]]) { const yy = ny + y0; for (let k = 0; k < l; k += 2) { const yk = yy - Math.round(k * 0.55); R(x, sx + dir * (6 + k) - 2, yk - 2, 5, 5, ol); R(x, sx + dir * (6 + k) - 1, yk - 1, 3, 3, bk); } const ex = sx + dir * (6 + l), ey = yy - Math.round(l * 0.55); R(x, ex - 1, ey - 7, 3, 7, ol); R(x, ex + dir * 4 - 1, ey - 5, 3, 5, ol); }
+  // the nest: a wide bowl of crossed twigs
+  const nw = 64, nh = 20, nx0 = sx - nw / 2 + 4; R(x, nx0 - 2, ny - 4, nw + 4, nh + 4, ol); R(x, nx0, ny - 2, nw, nh, '#7a5a34'); R(x, nx0 + 2, ny - 2, nw - 4, 4, '#3a2a18');
+  for (let k = 0; k < 14; k++) { const tx = nx0 + 2 + (k * 37 % (nw - 10)), ty = ny + 2 + (k * 13 % (nh - 6)); R(x, tx, ty, 10, 2, k % 3 ? '#b8925a' : '#5a4024'); }
+  for (let k = 0; k < 6; k++) { R(x, nx0 - 6 + k * 13, ny + nh - 4 + (k % 2) * 3, 2, 6, '#5a4024'); R(x, nx0 - 4 + k * 13, ny - 6 - (k % 2) * 2, 8, 2, '#8a6a42'); }
+  if (Object.values(n.items).some((v) => v > 0)) { const tw = Math.sin(G.t * 4) > 0; R(x, sx + 14, ny - 6, 6, 5, '#ffd23f'); if (tw) { R(x, sx + 16, ny - 12, 2, 16, '#fff6c0'); R(x, sx + 10, ny - 5, 14, 2, '#fff6c0'); } }
+  if (n.home) { const bob = Math.round(Math.sin(G.t * 3) * 1.5), cx = sx - 10, cy = ny - 22 + bob; // the thief, perched and watching
+    R(x, cx - 2, cy - 2, 26, 20, ol); R(x, cx, cy, 22, 16, '#22222e'); R(x, cx + 2, cy + 4, 12, 8, '#34344a'); R(x, cx + 14, cy - 10, 14, 14, ol); R(x, cx + 16, cy - 8, 10, 10, '#22222e'); R(x, cx + 26, cy - 4, 8, 4, ol); R(x, cx + 26, cy - 3, 7, 2, '#e8b030'); R(x, cx + 20, cy - 6, 3, 3, '#ffffff'); R(x, cx + 21, cy - 5, 1, 1, ol); R(x, cx - 8, cy + 6, 10, 5, ol); R(x, cx - 7, cy + 7, 9, 3, '#22222e'); R(x, cx + 6, cy + 16, 2, 5, '#e8b030'); R(x, cx + 13, cy + 16, 2, 5, '#e8b030'); }
+  if (n.hp < 3) for (let k = 0; k < 3 - n.hp; k++) R(x, nx0 + 10 + k * 18, ny + 4, 3, 10, '#1a120a'); } }
 function damageMob(m, base, weapon) {
   const s = G.s, def = MOB[m.type], w = WEAP[weapon] || {}, e = s.player.energy, Lx = L();
   if (m.immune && m.immune(m)) { floatText(m.x, GY - def.head - (m.alt || 0), Lx.immune, '#c9b48a'); Audio.sfx('thud'); return; }
@@ -3128,8 +3155,10 @@ function mobSpecial(m, dt) {
   if (m.type === 'salamander') m.immune = (mm) => !(mm.burstT > 0);
   if (m.type === 'mimic') { m.calm = (mm) => !mm.awake; m.onHit = (mm) => { mm.awake = true; }; if (!m.awake && Math.abs(m.x - p.x) < 80) { m.awake = true; G.shake = Math.max(G.shake || 0, 0.2); say(L().mimicWake); Audio.sfx('alert'); } }
   if (m.type === 'crow') {
-    m.onHeroHit = (mm) => { const own = RES.filter((k) => (G.s.inv[k] || 0) > 0 && !['ladder', 'gate'].includes(k)); if (own.length) { const k = own[(Math.random() * own.length) | 0]; G.s.inv[k]--; mm.stolen = k; mm.flee = 1; say(L().crowStole.replace('{x}', iname(k))); } };
-    if (m.flee) { m.x += (m.x > p.x ? 1 : -1) * 160 * dt; m.alt = Math.min(200, (m.alt || 70) + 40 * dt); if (Math.abs(m.x - p.x) > 900) { m.hidden = true; delete G.mobs[m.id]; } }
+    if (!G.s.crowHint && !m.flee && Math.abs(m.x - p.x) < 320) { G.s.crowHint = 1; G.qToast = { text: L().crowHint, t: 5 }; }
+    m.onHeroHit = (mm) => { const own = RES.filter((k) => (G.s.inv[k] || 0) > 0 && !['ladder', 'gate'].includes(k)); if (own.length) { const k = own[(Math.random() * own.length) | 0]; G.s.inv[k]--; mm.stolen = k; mm.flee = 1; const nest = crowNest(mm); nest.items[k] = (nest.items[k] || 0) + 1; nest.home = 1; mm.nestId = nest.id; say(L().crowStole.replace('{x}', iname(k))); G.qToast = { text: L().crowNest, t: 6 }; TCACHE.clear(); } };
+    if (m.flee) { const nest = m.nestId && G.s.nests && G.s.nests[m.nestId], tx = nest ? nest.x : m.x + (m.x > p.x ? 900 : -900), dir = Math.sign(tx - m.x) || 1; m.dir = dir; m.x += dir * 170 * dt; m.alt = nest ? Math.min(NEST_ALT, (m.alt || 70) + 60 * dt) : Math.min(200, (m.alt || 70) + 40 * dt);
+      if (nest ? Math.abs(tx - m.x) < 24 : Math.abs(m.x - p.x) > 900) { m.hidden = true; delete G.mobs[m.id]; if (nest) { nest.home = 1; G.s.mob[m.id] = { dead: G.s.clock.day }; } } }
   }
   if (m.type === 'sprite') m.onHeroHit = () => { p.vx = (Math.sign(p.x - m.x) || 1) * 520; p.kbT = 0.35; };
   if (m.type === 'harpy') m.onHeroHit = () => { if (!G.s.outfit || G.s.outfit !== 'featherCloak') { p.vy = -820; p.ground = false; p.peak = p.from = p.y; } };
@@ -3281,7 +3310,7 @@ function qPlaces(q) { const W = G.world, out = [], A0 = W.areas[0], A1 = W.areas
   switch (q.id) {
     case 'F1': case 'F4': case 'F6': case 'F7': case 'F11': case 'P8': case 'E1': case 'FIN': add(0, homeEnv()); break;
     case 'F2': case 'F3': case 'F5': case 'F9': case 'F10': vills(0); break;
-    case 'F13': add(0, envT(A0, crowTerrain(W))); break;
+    case 'F13': add(0, envT(A0, crowTerrain(W))); for (const id in (s.nests || {})) { const n = s.nests[id], A = W.areas[n.area]; add(n.area, envT(A, Math.floor(n.x / TW))); } break;
     case 'P2': case 'P3': case 'P5': case 'P13': caves(null); break;
     case 'P7': caves('juke'); break;
     case 'P9': caves('dragon'); break;

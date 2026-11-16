@@ -190,8 +190,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.12.1';
+const VERSION = '1.12.2';
 const CHANGELOG = [
+  { v: '1.12.2', k: 'i', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Grottes : avec la lampe frontale, double lumière ! La lanterne éclaire autour de toi et le faisceau de la lampe porte loin devant, dans la direction où tu regardes.'],
+    en: ['Caves: with the headlamp, double the light! The lantern lights up around you and the headlamp beam reaches far ahead, in the direction you face.'] },
   { v: '1.12.1', k: 'i', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
     fr: ['Plein écran : Échap ouvre le menu. Dans Chrome, avec le jeu ouvert comme fichier, garde Échap enfoncé pour quitter le plein écran ; sur claude.ai, le navigateur quitte toujours le plein écran avec Échap, et le menu pause s’ouvre en même temps (P pour revenir en plein écran).'],
     en: ['Full screen: Esc opens the menu. In Chrome, with the game opened as a file, hold Esc to leave full screen; on claude.ai the browser always leaves full screen on Esc, and the pause menu opens at the same time (P to go back to full screen).'] },
@@ -4632,11 +4635,13 @@ function drawDarkness(p, camX) {
   if (l && l.lit) { r = 200 + Math.sin(G.t * 9) * 3; if (l.placed != null) { lx = l.placed - camX; ly = GY - 14; } }
   else if (l) r = 44 + (Math.random() < 0.25 ? 26 : 0);
   hole(lx, ly, r);
+  const lamp = G.s && G.s.tools.headlamp && !G.room; if (lamp) headBeam(x, 1, true); // underground the headlamp shines too: the lantern lights around you, the beam reaches far ahead
   for (const Lt of (G.caveLights || [])) hole(Lt[0], Lt[1], Lt[2]);
   for (const sp of (G.caveSparks || [])) hole(sp[0], sp[1], 12);
   x.globalCompositeOperation = 'source-over'; x.globalAlpha = 1;
   ctx.drawImage(d, 0, 0);
   if (l && l.lit) glow(ctx, lx, ly, r * 0.8, '#ff9a40', 0.05);
+  if (lamp) headBeam(ctx, 0.9, false);
   for (const e of (G.mobEyes || [])) R(ctx, e[0] - 1, e[1] - 1, 3, 2, '#ff5030');
 }
 
@@ -5104,7 +5109,7 @@ function playDraw(dt, st) {
     if ((p.dodgeT || 0) > 0) for (let k = 2; k >= 1; k--) { x.globalAlpha = 0.18 * (3 - k); drawPerson(x, W / 2 - p.dodgeDir * k * 22, gy, heroPal(), { facing: p.facing, walk: true, phase: p.ph || 0 }); x.globalAlpha = 1; }
     if (G.dust && G.dust.length) { G.dust = G.dust.filter((d) => (d.t += 1 / 60) < 0.45); for (const d of G.dust) { x.globalAlpha = 0.8 * (1 - d.t / 0.45); disc(x, d.x - camX, gy - 6 - d.t * 18, 5 + d.t * 16, '#e8dcc0'); disc(x, d.x - camX + 6, gy - 4 - d.t * 10, 3 + d.t * 10, '#c8b48a'); x.globalAlpha = 1; } }
     const HU = huntPose(); const AP = HU && HU.atk ? HU.atk : G.atkA && G.atkA.t < G.atkA.dur ? Object.assign(atkPose(G.atkA), { combo: G.atkA.combo, heavy: G.atkA.heavy, ranged: G.atkA.ranged, weapon: G.atkA.weapon, blade: BLADE[G.atkA.weapon], prevAng: G.atkA.prevAng }) : null; if (AP && G.atkA && !(HU && HU.atk)) G.atkA.prevAng = AP.ang;
-    if (!(((G.heroHurt > 0 || (p.inv || 0) > 0.05) && (p.dodgeT || 0) <= 0) && (G.t * 20 | 0) % 2)) drawPerson(x, W / 2 + (AP ? p.facing * AP.lunge : 0), gy - (AP && p.ground ? AP.hop || 0 : 0), heroPal(), { lamp: s.tools.headlamp ? Math.max(0.01, (G.look && G.look.night) || 0) : 0, atk: AP, run: !!(p.runDir && Math.abs(p.vx) > 300 && !((p.dodgeT || 0) > 0) && p.ground && !G.act && !AP), facing: p.facing, walk: p.ground && Math.abs(p.vx) > 20 && !G.dancing, dance: !!G.dancing, eat: (G.eatT || 0) > 0, tool: HU ? HU.tool || null : (G.act && !G.act.fish ? G.act.tool : null), lift: !!(HU && HU.lift), cook: !!(G.act && G.act.cook), camp: !!(G.act && G.act.camp != null), bend: HU ? !!HU.bend : !!(G.act && G.act.bend), phase: HU && HU.phase != null ? HU.phase : G.dancing ? (Audio.beat() != null ? Audio.beat() * Math.PI : G.t * 6) : (p.ph || G.t * 12), air: !p.ground, crouch: p.crouch && !G.dancing, chop: HU ? !!HU.chop : (!!G.act && !G.act.fish && !G.act.bend && !G.act.cook) || (G.heroAtk > 0 && !AP), blink: (G.t % 3.4) < 0.12, blade: BLADE[s.gear.weapon], armor: !!s.gear.armor });
+    if (!(((G.heroHurt > 0 || (p.inv || 0) > 0.05) && (p.dodgeT || 0) <= 0) && (G.t * 20 | 0) % 2)) drawPerson(x, W / 2 + (AP ? p.facing * AP.lunge : 0), gy - (AP && p.ground ? AP.hop || 0 : 0), heroPal(), { lamp: s.tools.headlamp ? (G.p.area === 2 ? 1 : Math.max(0.01, (G.look && G.look.night) || 0)) : 0, atk: AP, run: !!(p.runDir && Math.abs(p.vx) > 300 && !((p.dodgeT || 0) > 0) && p.ground && !G.act && !AP), facing: p.facing, walk: p.ground && Math.abs(p.vx) > 20 && !G.dancing, dance: !!G.dancing, eat: (G.eatT || 0) > 0, tool: HU ? HU.tool || null : (G.act && !G.act.fish ? G.act.tool : null), lift: !!(HU && HU.lift), cook: !!(G.act && G.act.cook), camp: !!(G.act && G.act.camp != null), bend: HU ? !!HU.bend : !!(G.act && G.act.bend), phase: HU && HU.phase != null ? HU.phase : G.dancing ? (Audio.beat() != null ? Audio.beat() * Math.PI : G.t * 6) : (p.ph || G.t * 12), air: !p.ground, crouch: p.crouch && !G.dancing, chop: HU ? !!HU.chop : (!!G.act && !G.act.fish && !G.act.bend && !G.act.cook) || (G.heroAtk > 0 && !AP), blink: (G.t % 3.4) < 0.12, blade: BLADE[s.gear.weapon], armor: !!s.gear.armor });
     if (HU && HU.mosaic) huntMosaic(x, camX);
     drawPup(x, camX);
     if (G.dancing) for (let q = 0; q < 2; q++) { const ph2 = (G.t * 0.8 + q * 0.5) % 1; ctx.globalAlpha = 1 - ph2; text(x, '♪', W / 2 + (q ? 22 : -22) + Math.sin(G.t * 3 + q) * 6, gy - 80 - ph2 * 40, 18, '#ffd23f', 'center', 700, '#0e0805'); ctx.globalAlpha = 1; }

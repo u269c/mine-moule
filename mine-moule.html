@@ -111,9 +111,13 @@ function layout() {
 }
 function isFull() { return !!(document.fullscreenElement || document.webkitFullscreenElement); }
 // full screen toggle (P, or the ⛶ buttons): the browser's real full screen, with a note if it refuses
-function toggleFull() { try { if (isFull()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
-    const el = document.documentElement, rq = el.requestFullscreen || el.webkitRequestFullscreen; const pr = rq && rq.call(el, { navigationUI: 'hide' }); if (pr && pr.catch) pr.catch(() => { G.fullNo = G.t; }); else if (!rq) G.fullNo = G.t; } catch (e) { G.fullNo = G.t; } }
-addEventListener('fullscreenchange', layout); addEventListener('webkitfullscreenchange', layout);
+function toggleFull() { try { if (isFull()) { G.fsSelf = true; (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    const el = document.documentElement, rq = el.requestFullscreen || el.webkitRequestFullscreen; const pr = rq && rq.call(el, { navigationUI: 'hide' }); if (pr && pr.then) pr.then(() => { try { if (navigator.keyboard && navigator.keyboard.lock) navigator.keyboard.lock(['Escape']).catch(() => {}); } catch (e) { /* no keyboard lock */ } }, () => { G.fullNo = G.t; }); else if (!rq) G.fullNo = G.t; } catch (e) { G.fullNo = G.t; } }
+// Esc always leaves full screen in a browser. Where Chrome lets the page keep Esc (keyboard lock, top-level page only), Esc opens the menu and holding it leaves full screen;
+// elsewhere (inside claude.ai) leaving full screen with Esc also opens the pause menu, so the key still does what you meant
+function onFullChange() { layout(); if (isFull()) return; try { if (navigator.keyboard && navigator.keyboard.unlock) navigator.keyboard.unlock(); } catch (e) { /* none */ }
+  if (G.fsSelf) { G.fsSelf = false; return; } if (G.scene === 'PLAY' && !G.panel && !G.fade && !G.cab && !G.credits) { G.panel = 'pause'; G.menuI = 0; Audio.sfx('click'); } }
+addEventListener('fullscreenchange', onFullChange); addEventListener('webkitfullscreenchange', onFullChange);
 addEventListener('resize', layout); layout();
 
 function rng(seed) { let a = seed >>> 0; return function () { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
@@ -186,8 +190,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.12.0';
+const VERSION = '1.12.1';
 const CHANGELOG = [
+  { v: '1.12.1', k: 'i', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
+    fr: ['Plein écran : Échap ouvre le menu. Dans Chrome, avec le jeu ouvert comme fichier, garde Échap enfoncé pour quitter le plein écran ; sur claude.ai, le navigateur quitte toujours le plein écran avec Échap, et le menu pause s’ouvre en même temps (P pour revenir en plein écran).'],
+    en: ['Full screen: Esc opens the menu. In Chrome, with the game opened as a file, hold Esc to leave full screen; on claude.ai the browser always leaves full screen on Esc, and the pause menu opens at the same time (P to go back to full screen).'] },
   { v: '1.12.0', k: 'xff', date: { fr: '15 nov. 2026', en: 'Nov 15, 2026' },
     fr: ['Exporter fonctionne dans la page de jeu sur claude.ai : la page te demande de confirmer, puis le fichier se télécharge.', 'Carte du monde : chaque quête ouverte a son emoji, posé à côté de l’endroit où elle se passe, dès que tu as découvert cet endroit. Les quêtes de chasse (loups, spectres, sangliers, pierres savantes) restent sans repère.', 'Choisis un endroit sur la carte pour voir la liste de ses quêtes ; la quête suivie à l’écran brille en jaune. Le journal et la ligne sous la carte montrent aussi l’emoji.'],
     en: ['Export works in the play page on claude.ai: the page asks you to confirm, then the file downloads.', 'World map: every open quest has its own emoji, shown beside the place where it happens once you have discovered that place. Hunting quests (wolves, wraiths, boars, scholar’s stones) stay unmarked.', 'Pick a place on the map to see its quests listed; the quest shown on screen glows yellow. The journal and the line under the map wear the emoji too.'] },

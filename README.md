@@ -30,6 +30,7 @@ Open `mine-moule.html` in Chrome (desktop or phone). No build step, no install. 
 - Action combat with weapon damage types, armour types and a gentle setting
 - Building in the wild: stone, wood, brick, web and metal binding, ladders, gates, spikes, traps, shelters that count as beds
 - Reusable camp gear: a tent, a campfire and a field bench you set down and pack up anywhere
+- Controller rumble for hits, harvest blows and death, with an optional soft wave while running (pause menu)
 - A world map in two styles (Grandma's and Metro) with zoom, and quick travel that costs the time, energy and hunger of the trip
 - Lantern → silver lantern → headlamp, whose beam lights the path at night
 - 29 monsters including four bosses, and an illustrated bestiary

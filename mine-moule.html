@@ -190,8 +190,11 @@ Object.assign(STR.en, { crackT: 'Breaking the cracked wall', needPickWall: 'I ne
 Object.assign(STR.fr, { pileT: 'Je prends du bois', logT: 'Je ramasse la bûche', newsT: 'NOUVEAUTÉS', firstPlayable: 'Première version jouable', closeKey: 'Échap pour fermer' });
 Object.assign(STR.en, { pileT: 'Taking some wood', logT: 'Picking up the log', newsT: 'WHAT’S NEW', firstPlayable: 'First playable version', closeKey: 'Esc to close' });
 // ── VERSION & CHANGELOG ─────────────────────────────────────────────
-const VERSION = '1.15.2';
+const VERSION = '1.16.0';
 const CHANGELOG = [
+  { v: '1.16.0', k: 'ff', date: { fr: '16 nov. 2026', en: 'Nov 16, 2026' },
+    fr: ['Vibration de la manette ! Légère quand tu prends un coup et à chaque coup sur un arbre ou un rocher, plus forte quand l’arbre tombe, et très forte à la mort.', 'Nouvelle tuile « Vibration » dans le menu pause : oui, oui + course (une douce vague pendant que tu cours), ou non.'],
+    en: ['Controller rumble! Light when you get hit and on every blow to a tree or boulder, stronger when the tree crashes down, and hard on death.', 'New “Rumble” tile in the pause menu: on, on + running (a soft wave while you run), or off.'] },
   { v: '1.15.2', k: 'xf', date: { fr: '16 nov. 2026', en: 'Nov 16, 2026' },
     fr: ['Villages du Grand Nord, des Terres Brûlées et du ciel : un marchand se tient derrière son comptoir, de jour comme de nuit, avec une lanterne. Le « E » pour échanger est au-dessus de sa tête (avant, il flottait tout seul la nuit).', 'Village d’igloos : on peut entrer dans l’igloo de gauche pour se réchauffer une heure (un peu d’énergie en plus). L’igloo de droite reste le lit.'],
     en: ['Frozen North, Badlands and sky villages: a trader stands behind a counter day and night, with a lantern. The “E” to trade is above their head (it used to float on its own at night).', 'Igloo village: you can go into the left igloo to warm up for an hour (a little energy back). The right igloo is still the bed.'] },
@@ -2180,8 +2183,12 @@ function advanceHours(n) {
   s.stats.hours += n; s.player.hunger = clamp(s.player.hunger + n / 48, 0, 1); G.lastHour = Math.floor(s.stats.hours); TCACHE.clear();
 }
 function sleepFor(hours, after, msg) { G.panel = null; G.act = null; G.fade = { t: 0, dur: 2.8, done: false, msg, fn: () => { advanceHours(hours); after(); G.skyKey = ''; saveGame(); } }; Audio.sfx('sleep'); }
+// controller rumble: light for hits and harvest blows, hard for death, and an optional soft wave while running
+function rumbleMode() { return Save.d.rumble || 'on'; }
+function rumble(weak, strong, ms) { if (rumbleMode() === 'off') return; try { const pads = navigator.getGamepads ? navigator.getGamepads() : []; for (const gp of pads) { const va = gp && gp.connected && gp.vibrationActuator; if (va && va.playEffect) { const pr = va.playEffect('dual-rumble', { startDelay: 0, duration: ms, weakMagnitude: weak, strongMagnitude: strong }); if (pr && pr.catch) pr.catch(() => {}); } } } catch (e) { /* no rumble on this pad or browser */ } }
+function runRumble() { const p = G.p; if (rumbleMode() !== 'run' || !p || !p.ground || !p.runDir || G.panel || G.fade) { G.rumN = 0; return; } const now = G.t; if (now < (G.rumN || 0)) return; G.rumN = now + 0.15; const w = 0.05 + 0.07 * (Math.sin(now * 5.5) * 0.5 + 0.5); rumble(w, 0, 85); }
 function die() {
-  if (G.fade) return; const s = G.s; G.act = null; G.panel = null;
+  if (G.fade) return; const s = G.s; G.act = null; G.panel = null; rumble(1, 1, 700);
   G.fade = { t: 0, dur: 3.6, done: false, msg: L().died, fn: () => {
     s.clock.day += 1; TCACHE.clear(); const si = seasonInfo(s.clock.day, s.seasonDays); s.clock.sec = secForHour(8, si.k);
     Object.assign(s.player, { energy: 0.5, hunger: 0.5, lowH: 0, starveH: 0 }); s.stats.deaths = (s.stats.deaths || 0) + 1;
@@ -2204,7 +2211,7 @@ function liveHarv(id) { return G.liveObj === id; }
 function startLiveObj(it, ti, fell) { if (!it.spr || !G.act) return; G.act.obj = { id: it.id, wx: ti * TW + it.lx, spr: it.spr, kind: it.kind, fell, lh: -1 }; G.liveObj = it.id; TCACHE.clear(); }
 function boulderSprite(seed, P) { const key = 'b' + seed + P.key; G.bSpr = G.bSpr || {}; if (G.bSpr[key]) return G.bSpr[key]; const c = mkC(120, 84); drawBoulder(c.getContext('2d'), 60, 76, P, seed, true); G.bSpr[key] = c; return c; }
 function liveObjTick(dt) { G.dtLast = dt; if (!G.chips) G.chips = []; const A = G.act, O = A && A.obj; if (G.liveObj && !O) { G.liveObj = null; TCACHE.clear(); }
-  if (O) { const h = Math.floor(A.t * 3); if (h !== O.lh) { O.lh = h; O.hitT = G.t; const tree = O.kind === 'tree', dir = Math.sign(G.p.x - O.wx) || 1, by = tree ? GY - 26 : GY - 30 - Math.random() * 20;
+  if (O) { const h = Math.floor(A.t * 3); if (h !== O.lh) { O.lh = h; O.hitT = G.t; rumble(0.3, 0.1, 90); const tree = O.kind === 'tree', dir = Math.sign(G.p.x - O.wx) || 1, by = tree ? GY - 26 : GY - 30 - Math.random() * 20;
       for (let k = 0; k < (tree ? 4 : 6); k++) G.chips.push({ wx: O.wx + dir * (tree ? 10 : 30), y: by, vx: dir * (40 + Math.random() * 120), vy: -80 - Math.random() * 140, r: Math.random() * 6, vr: (Math.random() - 0.5) * 20, t: 0, c: tree ? (k % 2 ? '#d8b47a' : '#8a5a2e') : (k % 2 ? O.spr.P.rock[1] : O.spr.P.rock[0]), sz: tree ? 3 : 3 + (Math.random() * 4 | 0) });
       if (tree && Math.random() < 0.7) for (let k = 0; k < 3; k++) G.chips.push({ wx: O.wx + (Math.random() - 0.5) * 90, y: GY - 150 - Math.random() * 60, vx: 0, vy: 0, r: Math.random() * 6, vr: 3, t: 0, c: k % 2 ? '#6fae4a' : '#4f8a3a', sz: 3, leaf: true });
       G.shake = Math.max(G.shake || 0, tree ? 0.025 : 0.035); } } }
@@ -2225,7 +2232,7 @@ function drawHarvFx(o) { if (!G.chips) G.chips = []; if (!G.harvFx) G.harvFx = [
   x.globalAlpha = 1; G.chips = G.chips.filter((c) => c.t < (c.leaf ? 2.4 : 1.6)); if (G.chips.length > 140) G.chips.splice(0, G.chips.length - 140);
   for (const f of G.harvFx) { f.t += dt; const X = f.wx - o.camX;
     if (f.kind === 'tree') { const c = treeSprite(f.spr.k, f.spr.seed, 1, f.spr.P, ''), T1 = 1.1, k = clamp(f.t / T1, 0, 1), ang = f.dir * (Math.PI / 2) * k * k * k, fade = clamp(1 - (f.t - T1 - 0.4) / 0.5, 0, 1);
-      if (f.t >= T1 && !f.thud) { f.thud = true; G.shake = Math.max(G.shake || 0, 0.16); Audio.sfx('hit'); for (let j = 0; j < 14; j++) G.chips.push({ wx: f.wx + f.dir * (40 + Math.random() * 150), y: GY - 6, vx: (Math.random() - 0.5) * 80, vy: -60 - Math.random() * 90, r: 0, vr: 2, t: 0, c: j % 3 ? '#e8dcc0' : '#6fae4a', sz: 4 }); }
+      if (f.t >= T1 && !f.thud) { f.thud = true; rumble(0.4, 0.3, 220); G.shake = Math.max(G.shake || 0, 0.16); Audio.sfx('hit'); for (let j = 0; j < 14; j++) G.chips.push({ wx: f.wx + f.dir * (40 + Math.random() * 150), y: GY - 6, vx: (Math.random() - 0.5) * 80, vy: -60 - Math.random() * 90, r: 0, vr: 2, t: 0, c: j % 3 ? '#e8dcc0' : '#6fae4a', sz: 4 }); }
       x.save(); x.globalAlpha = fade; x.translate(X, GY - 24); x.rotate(ang); x.drawImage(c, -Math.round(c.width / 2), -c.height + 26); x.restore(); x.globalAlpha = 1; }
     else { const c = boulderSprite(f.seed, f.spr.P); if (!f.pcs) { f.pcs = []; const rj = rng(f.seed + 3), V = []; for (let i = 0; i <= 3; i++) { V[i] = []; for (let j = 0; j <= 2; j++) V[i][j] = [i * 40 + (i > 0 && i < 3 ? (rj() - 0.5) * 22 : 0), j * 42 + (j === 1 ? (rj() - 0.5) * 24 : 0)]; } for (let i = 0; i < 6; i++) f.pcs.push({ sx: (i % 3) * 40, sy: (i / 3 | 0) * 42, x: f.wx - 40 + (i % 3) * 40, y: GY - 55 + (i / 3 | 0) * 42, vx: ((i % 3) - 1) * 80 + (Math.random() - 0.5) * 50, vy: -140 - Math.random() * 120 + (i / 3 | 0) * 70, r: 0, vr: (Math.random() - 0.5) * 8 }); for (let i = 0; i < 6; i++) { const ci = i % 3, cj = i / 3 | 0; f.pcs[i].poly = [V[ci][cj], V[ci + 1][cj], V[ci + 1][cj + 1], V[ci][cj + 1]]; } G.shake = Math.max(G.shake || 0, 0.14); Audio.sfx('hit'); }
       x.globalAlpha = clamp(1 - (f.t - 1.1) / 0.5, 0, 1);
@@ -2438,7 +2445,7 @@ function paintTile(id, st) { const key = 'tile2:' + id + ':' + st; if (PLATE.has
   const heart = (x, y, s, col) => { const p = []; for (let i = 0; i < 16; i++) { const t = i / 16 * Math.PI * 2; p.push([x + s * 0.06 * 16 * Math.sin(t) ** 3, y - s * 0.06 * (13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))]); } shape(p, col, 1.6); };
   const swirl = (x, y, s, col) => { const p = []; for (let i = 0; i < 20; i++) { const a = i * 0.6, rr = s * i / 20; p.push([x + Math.cos(a) * rr, y + Math.sin(a) * rr]); } line(p, 1.8, col); };
   // paper + painted background wash: a sky band and a ground band in big sloppy strokes
-  const BG = { journal: ['#ffe9a8', '#ffb86b', '#c98a4a'], costume: ['#ffd1e8', '#c99bff', '#8a5ad8'], map: ['#cdeeff', '#9fd88a', '#6aa84a'], grade: ['#e6dcff', '#b9a6ff', '#7a62d8'], music: ['#d9f7c9', '#8fd8ff', '#4aa8e0'], sfx: ['#ffe0c9', '#ff9fb0', '#e05a7a'], lang: ['#fff3b0', '#9fe0d0', '#3aa898'], gentle: ['#ffe0f0', '#ffc6a8', '#e89a7a'] }[id] || ['#fff', '#ddd', '#aaa'];
+  const BG = { journal: ['#ffe9a8', '#ffb86b', '#c98a4a'], costume: ['#ffd1e8', '#c99bff', '#8a5ad8'], map: ['#cdeeff', '#9fd88a', '#6aa84a'], grade: ['#e6dcff', '#b9a6ff', '#7a62d8'], music: ['#d9f7c9', '#8fd8ff', '#4aa8e0'], rumble: ['#e0f4ff', '#ffd27a', '#e0a040'], sfx: ['#ffe0c9', '#ff9fb0', '#e05a7a'], lang: ['#fff3b0', '#9fe0d0', '#3aa898'], gentle: ['#ffe0f0', '#ffc6a8', '#e89a7a'] }[id] || ['#fff', '#ddd', '#aaa'];
   g.fillStyle = '#fbf3e2'; g.fillRect(0, 0, S, S);
   for (let i = 0; i < 26; i++) { const y = r() * S * 0.62; g.globalAlpha = 0.55; dab(r() * S, y, BG[0], 10 + r() * 8); }
   for (let i = 0; i < 18; i++) { const y = S * 0.66 + r() * S * 0.34; g.globalAlpha = 0.6; dab(r() * S, y, BG[1], 10 + r() * 8); } g.globalAlpha = 1;
@@ -2485,6 +2492,15 @@ function paintTile(id, st) { const key = 'tile2:' + id + ':' + st; if (PLATE.has
     line([[23, 52], [27, 53]], 1.4); line([[31, 52], [35, 53]], 1.4); dab(29, 56, '#ff5a8a', 1.2); for (let k = 0; k < 3; k++) line([[44 + k * 8, 50], [46 + k * 8, 58]], 1.6, '#e07a2a'); line([[70, 60], [80, 52], [76, 46]], 4, off ? '#b8a898' : '#ffa64a');
     if (!off) { g.fillStyle = '#7a62d8'; g.font = '900 13px ' + FONT; g.textAlign = 'center'; g.fillText('z', 52, 30); g.font = '900 10px ' + FONT; g.fillText('z', 60, 22); g.font = '900 8px ' + FONT; g.fillText('z', 66, 15);
       g.save(); g.translate(78, 24); g.rotate(0.6); shape([[0, -14], [5, -4], [4, 8], [0, 14], [-4, 8], [-5, -4]], '#ffffff', 1.6); line([[0, -12], [0, 14]], 1, '#c99bff'); g.restore(); heart(14, 22, 4, '#ff5a8a'); } }
+  if (id === 'rumble') { // a chubby controller wobbling, with crayon wiggle lines (and a running shoe for the wave mode)
+    g.save(); g.translate(48, 50); g.rotate(-0.12); const body = off ? '#c0b8c0' : '#5a6ad8';
+    shape([[-30, -12], [30, -12], [36, 6], [30, 20], [18, 22], [10, 10], [-10, 10], [-18, 22], [-30, 20], [-36, 6]], body);
+    shape(ring(-18, -2, 6, 6, 10), off ? '#a8a0a8' : '#2a2a4a', 1.6); line([[-21, -2], [-15, -2]], 2, '#ffffff'); line([[-18, -5], [-18, 1]], 2, '#ffffff');
+    for (const [bx, by, col] of [[16, -6, '#ff5a5a'], [24, -1, '#5ed16a'], [16, 4, '#3aa8ff'], [8, -1, '#ffd23f']]) shape(ring(bx, by, 3.4, 3.4, 8), off ? '#d0c8d0' : col, 1.2);
+    dab(-4, -6, INK, 1.2); dab(4, -6, INK, 1.2); line([[-4, -1], [0, 1.5], [4, -1]], 1.2); g.restore();
+    if (!off) { for (const [x0b, y0b, sgn] of [[8, 40, -1], [88, 40, 1]]) line([[x0b, y0b - 12], [x0b + sgn * 4, y0b - 6], [x0b, y0b], [x0b + sgn * 4, y0b + 6], [x0b, y0b + 12]], 2.6, '#ff8a3a');
+      if (st === 'run') { shape([[30, 84], [56, 84], [62, 78], [48, 74], [40, 66], [30, 70]], '#ff5a8a', 1.8); line([[34, 72], [40, 74]], 1.4, '#ffffff'); for (let k = 0; k < 3; k++) line([[66 + k * 6, 72 + k * 3], [80 + k * 6, 72 + k * 3]], 1.6, '#3aa8ff'); }
+      else { star(16, 16, 5, '#ffd23f'); star(82, 18, 4, '#ff5a8a'); } } }
   // finger-painted sprinkles, then the "off" crayon scribble
   for (let i = 0; i < 10; i++) dab(r() * S, r() * S, ['#ff5a8a', '#ffd23f', '#3aa8ff', '#5ed16a'][i % 4] + '88', 1.2);
   if (off) { g.globalAlpha = 0.35; g.fillStyle = '#fbf3e2'; g.fillRect(0, 0, S, S); g.globalAlpha = 1; const p = []; for (let i = 0; i < 9; i++) p.push([14 + i * 8.5, i % 2 ? 22 + i * 7 : 10 + i * 8]); line(p, 3, '#e8302a'); line([[16, 18], [80, 82]], 5, '#e8302a'); line([[80, 16], [16, 80]], 5, '#e8302a'); }
@@ -2510,27 +2526,32 @@ function pausePanel() {
     { id: 'music', st: Save.d.musicOff ? 'off' : 'on', lb: Lx.music, fn: () => { Save.d.musicOff = !Save.d.musicOff; Save.save(); Audio.applyGain(); } },
     { id: 'sfx', st: Save.d.sfxOff ? 'off' : 'on', lb: fr ? 'Bruitages' : 'Sounds', fn: () => { Save.d.sfxOff = !Save.d.sfxOff; Save.save(); Audio.applyGain(); } },
     { id: 'lang', st: Save.d.lang, lb: Save.d.lang === 'fr' ? 'Français' : 'English', fn: () => { Save.d.lang = Save.d.lang === 'fr' ? 'en' : 'fr'; document.documentElement.lang = Save.d.lang; Save.save(); G.envKey = ''; } },
-    { id: 'gentle', st: Save.d.gentle ? 'on' : 'off', lb: Lx.gentleL, fn: () => { Save.d.gentle = !Save.d.gentle; Save.save(); } }];
+    { id: 'gentle', st: Save.d.gentle ? 'on' : 'off', lb: Lx.gentleL, fn: () => { Save.d.gentle = !Save.d.gentle; Save.save(); } },
+    { id: 'rumble', st: rumbleMode(), lb: { on: fr ? 'Vibration' : 'Rumble', run: fr ? 'Vibration + course' : 'Rumble + running', off: fr ? 'Vibration : non' : 'Rumble: off' }[rumbleMode()], fn: () => { Save.d.rumble = { on: 'run', run: 'off', off: 'on' }[rumbleMode()]; Save.save(); if (Save.d.rumble !== 'off') rumble(0.5, 0.3, 160); } }];
   const words = [{ lb: Lx.resume, fn: () => { G.panel = null; }, main: true }, { lb: fr ? 'Recommencer' : 'Restart', fn: () => { if (G.restartAsk && G.t - G.restartAsk < 4) { G.restartAsk = 0; const slot = G.slot; G.panel = null; Save.load(); startPlay(slot); G.scene = 'PLAY'; } else G.restartAsk = G.t; } },
     { lb: fr ? 'Exporter' : 'Export', fn: () => { G.panel = null; exportSave(); } }, { lb: fr ? 'Sauvegarder' : 'Save', fn: () => { const ok = saveGame(); G.savedT = ok === false ? -1 : G.t; } }, { lb: fr ? 'Quitter' : 'Quit', fn: () => { saveGame(); G.panel = null; toTitle(); } }];
   const N = tiles.length + words.length; G.menuI = clamp(G.menuI || 0, 0, N - 1); let mi = G.menuI;
-  if (Input.hit('right')) mi = mi < 8 ? (mi % 4 < 3 ? mi + 1 : mi - 3) : (mi < N - 1 ? mi + 1 : 8); if (Input.hit('left')) mi = mi < 8 ? (mi % 4 > 0 ? mi - 1 : mi + 3) : (mi > 8 ? mi - 1 : N - 1);
-  if (Input.hit('down')) mi = mi < 4 ? mi + 4 : mi < 8 ? 8 + Math.min(4, mi - 4) : mi; if (Input.hit('up')) mi = mi >= 8 ? 4 + Math.min(3, mi - 8) : mi >= 4 ? mi - 4 : mi;
+  const C = 5, nT = tiles.length, rowStart = (i) => Math.floor(i / C) * C, rowEnd = (i) => Math.min(nT - 1, rowStart(i) + C - 1);
+  if (Input.hit('right')) mi = mi < nT ? (mi < rowEnd(mi) ? mi + 1 : rowStart(mi)) : (mi < N - 1 ? mi + 1 : nT);
+  if (Input.hit('left')) mi = mi < nT ? (mi > rowStart(mi) ? mi - 1 : rowEnd(mi)) : (mi > nT ? mi - 1 : N - 1);
+  if (Input.hit('down')) mi = mi < nT ? (mi + C < nT ? mi + C : rowStart(mi) + C < nT ? nT - 1 : nT + Math.min(words.length - 1, mi % C)) : mi;
+  if (Input.hit('up')) mi = mi >= nT ? (C + (mi - nT) < nT ? C + (mi - nT) : Math.min(nT - 1, mi - nT)) : mi >= C ? mi - C : mi;
   if (mi !== G.menuI) { G.menuI = mi; Audio.sfx('move'); }
-  const TS = 104, gap = (w - 56 - TS * 4) / 3;
-  tiles.forEach((t, i) => { const X = x0 + 28 + (i % 4) * (TS + gap), Y = y0 + 58 + Math.floor(i / 4) * (TS + 34), sel = G.menuI === i;
+  const TS = 96, gap = (w - 56 - TS * 5) / 4;
+  tiles.forEach((t, i) => { const X = x0 + 28 + (i % 5) * (TS + gap), Y = y0 + 62 + Math.floor(i / 5) * (TS + 34), sel = G.menuI === i;
     R(ctx, X - 3, Y - 3, TS + 6, TS + 6, sel ? '#ffd23f' : '#0e0805');
     if (t.lock) { drawGradeLock(X, Y, TS, sel); hits(X, Y, TS, TS / 2, () => { G.menuI = i; s.grade = (s.grade || 3) % 6 + 1; Audio.sfx('click'); }); hits(X, Y + TS / 2, TS, TS / 2, () => { G.menuI = i; s.grade = ((s.grade || 3) + 4) % 6 + 1; Audio.sfx('click'); }); }
     else { ctx.drawImage(paintTile(t.id, t.st), X + 4, Y + 4, TS - 8, TS - 8); if (sel) { ctx.globalAlpha = 0.12 + 0.06 * Math.sin(G.t * 5); R(ctx, X, Y, TS, TS, '#ffffff'); ctx.globalAlpha = 1; } hits(X, Y, TS, TS, () => { G.menuI = i; t.fn(); Audio.sfx('click'); }); }
-    text(ctx, t.lb, X + TS / 2, Y + TS + 15, 12, sel ? '#ffd23f' : '#f3e6c4', 'center', 700); });
+    text(ctx, fitText(t.lb, TS + gap - 4, 12, 700), X + TS / 2, Y + TS + 15, 12, sel ? '#ffd23f' : '#f3e6c4', 'center', 700); });
   const by = y0 + h - 62, bw = (w - 56 - 4 * 10) / 5;
   words.forEach((b, j) => { const i = tiles.length + j, X = x0 + 28 + j * (bw + 10), sel = G.menuI === i, ask = j === 1 && G.restartAsk && G.t - G.restartAsk < 4;
     R(ctx, X, by, bw, 40, sel ? '#ffd23f' : b.main ? '#5a3b24' : '#3b2618'); text(ctx, ask ? (fr ? 'Sûr ?' : 'Sure?') : b.lb, X + bw / 2, by + 20, 15, sel ? '#2a1b12' : ask ? '#ff8a6a' : '#f3e6c4', 'center', 800); hits(X, by, bw, 40, () => { G.menuI = i; b.fn(); Audio.sfx('click'); }); });
   let note = '';
   if (G.restartAsk && G.t - G.restartAsk < 4) note = fr ? 'Revenir à la dernière sauvegarde ? Appuie encore sur Recommencer.' : 'Go back to your last save? Press Restart again.';
   else if (G.savedT && G.t - G.savedT < 2.5) note = fr ? 'Partie sauvegardée ✓' : 'Game saved ✓';
-  else if (G.menuI === 7) note = fr ? 'Mode doux : les monstres font moitié moins mal, le froid et la chaleur fatiguent moins vite.' : 'Gentle mode: monsters hurt half as much, and cold and heat tire you more slowly.';
-  else if (G.menuI === 3) note = fr ? 'Fais tourner la roue (haut / bas) : la difficulté des calculs de la pierre à énigmes.' : 'Spin the wheel (top / bottom): how hard the riddle stone’s sums are.';
+  else if (tiles[G.menuI] && tiles[G.menuI].id === 'rumble') note = fr ? 'Vibration de la manette : coups reçus, coups sur les arbres et les rochers, forte à la mort. « + course » ajoute une douce vague quand tu cours.' : 'Controller rumble: getting hit, blows on trees and boulders, strong on death. “+ running” adds a soft wave while you run.';
+  else if (tiles[G.menuI] && tiles[G.menuI].id === 'gentle') note = fr ? 'Mode doux : les monstres font moitié moins mal, le froid et la chaleur fatiguent moins vite.' : 'Gentle mode: monsters hurt half as much, and cold and heat tire you more slowly.';
+  else if (tiles[G.menuI] && tiles[G.menuI].id === 'grade') note = fr ? 'Fais tourner la roue (haut / bas) : la difficulté des calculs de la pierre à énigmes.' : 'Spin the wheel (top / bottom): how hard the riddle stone’s sums are.';
   if (note) text(ctx, note, W / 2, by - 14, 12, '#c9b48a', 'center', 600);
   else text(ctx, '♪ ' + SONG_DATA[G.songI || 0][Save.d.lang] + ' ♪', W / 2, by - 14, 12, '#8a7a5a', 'center', 500);
   if (okKey()) { const i = G.menuI; if (i < tiles.length) tiles[i].fn(); else words[i - tiles.length].fn(); Audio.sfx('click'); }
@@ -3070,7 +3091,7 @@ function damageMob(m, base, weapon) {
 }
 function mobHitHero(m, mul) {
   const s = G.s, p = G.p, def = MOB[m.type];
-  if ((p.inv || 0) > 0 || G.fade || s.player.energy <= 0) return;
+  if ((p.inv || 0) > 0 || G.fade || s.player.energy <= 0) return; rumble(0.45, 0.2, 140);
   const loss = 0.1 * (def.dmgMul || 1) * (m.ringMul || 1) * (mul || 1) * (1 - armourRed(def.dmgType)) * (G.dark ? 2 : 1) * (gentle() ? 0.5 : 1);
   s.player.energy = clamp(s.player.energy - loss, 0, 1); G.heroHurt = 0.45; G.shake = 0.25; p.inv = 0.8;
   p.vx = (Math.sign(p.x - m.x) || 1) * 280; p.kbT = 0.2; if (p.ground) { p.vy = -240; p.ground = false; } p.ladder = null;
@@ -5193,7 +5214,7 @@ function playDraw(dt, st) {
     ctx.globalAlpha = 1 - k; if (k < 0.35) { disc(ctx, X, Y, (sp.big ? 12 : 8) * (1 - k * 2), '#ffffff'); }
     for (let j = 0; j < n; j++) { const a = (j / n) * Math.PI * 2 + sp.seed, r0 = 6 + k * 18, r1 = r0 + (sp.big ? 12 : 8) * (1 - k); ctx.strokeStyle = j % 2 ? sp.col : '#ffe070'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(X + Math.cos(a) * r0, Y + Math.sin(a) * r0 * 0.8); ctx.lineTo(X + Math.cos(a) * r1, Y + Math.sin(a) * r1 * 0.8); ctx.stroke(); } ctx.globalAlpha = 1; }
   for (let i = G.floats.length - 1; i >= 0; i--) { const f = G.floats[i]; f.t += dt; if (f.t > 1) { G.floats.splice(i, 1); continue; } ctx.globalAlpha = 1 - Math.max(0, f.t - 0.6) / 0.4; text(ctx, f.txt, f.wx - camX, f.y - f.t * 26, 16, f.col, 'center', 700, '#0e0805'); ctx.globalAlpha = 1; }
-  drawShots(camX); drawEShots(camX); drawBossBar(); if (mapStyle() === 'metro' && !G.panel && !G.fade && !G.cab && !G.credits) hiDraw(drawMiniMap); else drawMiniMap(); drawClimateHUD(); drawQuestTracker(); hintTick();
+  drawShots(camX); drawEShots(camX); drawBossBar(); if (mapStyle() === 'metro' && !G.panel && !G.fade && !G.cab && !G.credits) hiDraw(drawMiniMap); else drawMiniMap(); drawClimateHUD(); drawQuestTracker(); hintTick(); runRumble();
   if (G.qToast) { G.qToast.t -= dt; if (G.qToast.t <= 0) G.qToast = null; else { ctx.font = '700 14px ' + FONT; const tw2 = Math.min(760, ctx.measureText(G.qToast.text).width + 30); ctx.globalAlpha = clamp(G.qToast.t * 2, 0, 1); R(ctx, W / 2 - tw2 / 2, BY - 40, tw2, 28, '#0e0805'); R(ctx, W / 2 - tw2 / 2 + 2, BY - 38, tw2 - 4, 24, '#2a1b12'); text(ctx, G.qToast.text.slice(0, 100), W / 2, BY - 26, 14, '#ffd23f', 'center', 600); ctx.globalAlpha = 1; } }
   if (G.pebble) { G.pebble.t += dt * 5; if (G.pebble.t >= 1) G.pebble = null; else { const px = lerp(G.pebble.from, G.pebble.to, G.pebble.t) - camX, py = lerp(G.pebble.fy || GY - 40, GY - 40, G.pebble.t) - Math.sin(G.pebble.t * Math.PI) * 14; R(ctx, px - 3, py - 3, 6, 6, '#0e0805'); R(ctx, px - 2, py - 2, 4, 4, '#a9b0b8'); } }
   if (G.combat) { const c = G.combat, Lx = L();

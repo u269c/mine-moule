@@ -145,19 +145,28 @@ figcaption b{color:var(--ink)}
 }
 @media (prefers-reduced-motion:no-preference){.card{transition:border-color .15s,box-shadow .15s}}
 </style>
+<style>
+.tbl{border-collapse:collapse;width:100%;font-size:.92rem;background:var(--panel);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.tbl th,.tbl td{padding:8px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.tbl th{font:600 .72rem var(--f-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
+.tbl td{font-variant-numeric:tabular-nums}.tbl tr:last-child td{border-bottom:0}
+.tbl b{color:var(--ink)}
+.untested{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.untested div{background:var(--panel);border:1px dashed var(--line);border-radius:6px;padding:12px 14px;font-size:.92rem}
+.untested b{display:block;font-family:var(--f-display)}
+@media (max-width:760px){.untested{grid-template-columns:1fr}}
+</style>
 
 <div class="wrap">
 <header>
-  <span class="eyebrow">Playtest survey · build 1.10.4</span>
+  <span class="eyebrow">Playtest · build 1.13.0</span>
   <h1>Mine-Moule Playtest Report</h1>
-  <p class="lede">256 generated worlds, read by three agents playing from a kid's side of the screen. Five questions: where it turns into toil, where the story wobbles, which tracks are too hard or too easy, where the story breaks, and whether a player can even tell they are on a story track.</p>
+  <p class="lede">Where the game stands now, from 288 simulated playthroughs of 1.12.1 and a census of 256 generated worlds. Only open problems are listed; everything found in earlier rounds has been fixed.</p>
   <div class="meta">
-    <span class="chip">256 worlds · seeds 1–256</span>
-    <span class="chip">62 quests · 5 lanes</span>
-    <span class="chip">FR + EN text checked</span>
-    <span class="chip">29 monsters</span>
-    <span class="chip">288 simulated playthroughs</span>
-    <span class="chip pending">Rerun on 1.12.1 · 141 / 144 perfect runs finish</span>
+    <span class="chip">288 simulated runs · 2 bots</span>
+    <span class="chip">256-world census</span>
+    <span class="chip">62 quests</span>
+    <span class="chip">FR + EN</span>
   </div>
 </header>
 
@@ -165,126 +174,70 @@ figcaption b{color:var(--ink)}
   <div class="headline">
     <div>
       <span class="eyebrow" id="h-head">Can the story be finished?</span>
-      <div class="big">157<small> / 256 worlds</small></div>
-      <p class="lede" style="margin-top:10px">61% of worlds can reach the ending. The other 99 are missing at least one thing a quest requires, and nothing in the game tells the player.</p>
-      <div class="seam" id="seam" aria-hidden="true"></div>
-      <div class="legend"><span><b style="background:var(--ore)"></b>can finish</span><span><b style="background:var(--crit)"></b>blocked</span></div>
+      <div class="big">Yes<small> · 141 / 144 runs</small></div>
+      <p class="lede" style="margin-top:10px">A player who knows the map reaches the ending in nearly every world. The three misses were deaths, not missing quests. A player who only follows the hints finishes 58 of 144, and every failure is a death in the late game.</p>
+      <div class="seam" id="seam" aria-hidden="true" style="grid-template-columns:repeat(24,1fr)"></div>
+      <div class="legend"><span><b style="background:var(--ore)"></b>knows the map: finished</span><span><b style="background:var(--crit)"></b>died before the end</span></div>
     </div>
     <div class="stats">
-      <div class="stat"><span class="n">5</span><span class="l">spawn guarantees bring all 256 worlds to finishable</span></div>
-      <div class="stat"><span class="n">280 min</span><span class="l">worst-case dead time waiting for fishing season</span></div>
-      <div class="stat"><span class="n">69</span><span class="l">wooden-sword hits to fell the golem</span></div>
-      <div class="stat"><span class="n">7+</span><span class="l">quests whose French and English text disagree</span></div>
+      <div class="stat"><span class="n">51 / 72</span><span class="l">hint-following runs finished in gentle mode</span></div>
+      <div class="stat"><span class="n">7 / 72</span><span class="l">hint-following runs finished in normal mode</span></div>
+      <div class="stat"><span class="n">0</span><span class="l">quests lost by doing them too early</span></div>
+      <div class="stat"><span class="n">37 min</span><span class="l">spent searching per run (was 56)</span></div>
     </div>
   </div>
 </section>
 
-<section aria-labelledby="h-block">
-  <span class="eyebrow">Broken points</span>
-  <h2 id="h-block">What is missing in the blocked worlds</h2>
-  <p class="lede">Worlds blocked per missing requirement. A world can miss more than one, so the bars add up past 99.</p>
-  <div class="bars" id="bars"></div>
-</section>
-
 <section aria-labelledby="h-issues">
-  <span class="eyebrow">Findings</span>
-  <h2 id="h-issues">Issues and suggested fixes</h2>
+  <span class="eyebrow">Open problems</span>
+  <h2 id="h-issues">What still needs work</h2>
   <div class="toolbar">
     <div class="tabs" id="tabs" role="group" aria-label="Question"></div>
     <div class="row2">
       <button class="sev" data-s="blocker" aria-pressed="true">blocker</button>
       <button class="sev" data-s="major" aria-pressed="true">major</button>
       <button class="sev" data-s="minor" aria-pressed="true">minor</button>
-      <input type="search" id="q" placeholder="Search issues, quest ids (C5, F9…)" aria-label="Search issues">
+      <input type="search" id="q" placeholder="Search problems, quest ids (E1, C2…)" aria-label="Search problems">
     </div>
   </div>
   <p class="qnote" id="qnote"></p>
   <div class="cards" id="cards"></div>
 </section>
 
-<section aria-labelledby="h-shots">
-  <span class="eyebrow">Evidence</span>
-  <h2 id="h-shots">What the player sees</h2>
-  <div class="shots">
-    <figure><img src="img/FIN_OPEN-journal.jpg" alt="English journal, Home tab, with French quest names and 61 of 62 pages" loading="lazy" width="960" height="540">
-      <figcaption><b>Final quest open, journal says 61 / 62.</b> The FIN quest has no row anywhere, quest names stay in French in the English game, and F5 still says "the F2 village".</figcaption></figure>
-    <figure><img src="img/F2-board.jpg" alt="Village notice board listing three quests" loading="lazy" width="960" height="540">
-      <figcaption><b>Notice board.</b> No reward shown, no hint where the woodpiles or the crow are, and the internal id "F2" leaks into the task.</figcaption></figure>
-  </div>
-</section>
-
-<section aria-labelledby="h-plan">
-  <span class="eyebrow">Suggested order</span>
-  <h2 id="h-plan">Fix plan in three passes</h2>
-  <div class="waves">
-    <div class="wave"><span class="w">Pass 1 · make it finishable</span><h3>World generation guarantees</h3>
-      <ul><li>Brigand camp always placed</li><li>Library always in a Far Shore village</li><li>At least 2 shield crabs</li><li>Minimum counts for quest mobs in the lands (third gargoyle)</li><li>A crow in the home area</li><li>F9 counts villages that exist</li></ul>
-      <p class="out">Outcome: 256 / 256 worlds can finish. Small, contained code in world gen.</p></div>
-    <div class="wave"><span class="w">Pass 2 · make it readable</span><h3>Story text and hints</h3>
-      <ul><li>Translated quest names, FR/EN parity pass</li><li>FIN row in the journal</li><li>Show rewards on board and journal</li><li>Quest tracker under the energy bar</li><li>Wrapped text or a detail view</li><li>Real village names in <code class="mono">{village}</code></li></ul>
-      <p class="out">Outcome: a player always knows the next story step and why it matters.</p></div>
-    <div class="wave"><span class="w">Pass 3 · make it flow</span><h3>Pacing and balance</h3>
-      <ul><li>Off-season fishing and a fish trade</li><li>C5 asks for 6 imps</li><li>Lands start at 1.6× difficulty</li><li>Obsidian blade gets pierce</li><li>Golem hint or tuning</li><li>Fresh openings for book pages</li></ul>
-      <p class="out">Outcome: no wait longer than one in-game day, difficulty climbs with distance.</p></div>
-  </div>
-</section>
-
-<section aria-labelledby="h-sim">
-  <span class="eyebrow">Simulation agent</span>
-  <h2 id="h-sim">288 simulated playthroughs</h2>
-  <p class="lede">Two bots played every world: one that knows the map, one that explores and follows the journal. In 1.10.4 neither ever reached the ending. Death counts are rough (the food model is crude); the structural findings were checked against the code.</p>
-  <div class="stats" style="grid-template-columns:repeat(4,minmax(0,1fr))">
-    <div class="stat"><span class="n">0 / 288</span><span class="l">runs reached the ending in 1.10.4</span></div>
-    <div class="stat"><span class="n">58 · 48</span><span class="l">median quests done of 62 (efficient · explorer)</span></div>
-    <div class="stat"><span class="n">161 · 616 min</span><span class="l">median play time (efficient · explorer)</span></div>
-    <div class="stat"><span class="n">135 / 144</span><span class="l">explorer runs that lost a quest by doing it too early</span></div>
-  </div>
-  <div class="sim">
-    <h3>What it found that the other agents missed, and the 1.11.0 fix</h3>
-    <p><b>Mimics never spawned</b>, so P13 and the ending were impossible in every world. Now one sleeps in the first hall of every cave while P13 is open.</p>
-    <p><b>One-shot actions done early lost their quest for good</b> (arcade wall, secret room, dragon coins, Crossing stone, crafting the lantern early). They now count when the quest opens.</p>
-    <p><b>Music-box room missing in 24% of worlds, dragon room in 46%, and 2 worlds had no cave near home.</b> Every world now has two caves, with both rooms.</p>
-    <p><b>Ore ran out in 40% of worlds and scholar’s stones ran out for P10.</b> Ore grows back each season; stones wake a week after you solve them.</p>
-    <p><b>Slowest quests:</b> E1 Great Siege (11.5 game-days median), C5 imps (8.8), F12 festival (about 7 days of waiting), F5 fish with 7-day seasons (26 days). E1, C5 and fishing are retuned; F12 is unchanged.</p>
-  </div>
-  <div class="sim">
-    <h3>Re-check after 1.11.0</h3>
-    <p>The same 256 worlds, built by the game’s own code, now all contain every quest target: camp, library, crabs, crow, beetles, imps, sprites, harpies, gargoyles, golem, snowmen, music-box room, dragon room and a mimic. 0 blocked, 0 page errors.</p>
-  </div>
-</section>
-
-<section aria-labelledby="h-rerun">
-  <span class="eyebrow">Rerun · build 1.12.1</span>
-  <h2 id="h-rerun">The same 288 runs, after the fixes</h2>
-  <p class="lede">Same grid, same two bots, same model as the 1.10.4 run. The bot that knows the map now reaches the ending in almost every world; the explorer that only follows hints finishes a third of the time, and every one of its failures is a death, not a missing quest.</p>
-  <div class="tw" style="overflow-x:auto"><table style="border-collapse:collapse;width:100%;font-size:.92rem;background:var(--panel);border:1px solid var(--line)">
-    <thead><tr style="text-align:left"><th style="padding:8px 10px">Measure</th><th style="padding:8px 10px">Efficient 1.10.4</th><th style="padding:8px 10px">Efficient 1.12.1</th><th style="padding:8px 10px">Explorer 1.10.4</th><th style="padding:8px 10px">Explorer 1.12.1</th></tr></thead>
-    <tbody style="font-variant-numeric:tabular-nums">
-      <tr><td style="padding:6px 10px">Reached the ending</td><td>0 / 144</td><td><b>141 / 144</b></td><td>0 / 144</td><td><b>58 / 144</b> (gentle 51, normal 7)</td></tr>
-      <tr><td style="padding:6px 10px">Median quests done of 62</td><td>58</td><td><b>62</b></td><td>48</td><td><b>60</b></td></tr>
-      <tr><td style="padding:6px 10px">Median day on the Far Shore</td><td>4</td><td>4</td><td>55</td><td><b>40</b></td></tr>
-      <tr><td style="padding:6px 10px">Median day the Frost King falls</td><td>47.5</td><td>49.5</td><td>115</td><td><b>103</b></td></tr>
-      <tr><td style="padding:6px 10px">Median deaths</td><td>16</td><td>19</td><td>19</td><td>23</td></tr>
-      <tr><td style="padding:6px 10px">Quests lost by doing them early</td><td>0</td><td>0</td><td>135 runs</td><td><b>0</b></td></tr>
-      <tr><td style="padding:6px 10px">Search time per run</td><td>—</td><td>—</td><td>56 min</td><td><b>37 min</b></td></tr>
+<section aria-labelledby="h-progress">
+  <span class="eyebrow">Progress</span>
+  <h2 id="h-progress">Since the first playtest</h2>
+  <p class="lede">The same 288 runs on 1.10.4 and on 1.12.1. The comparison is reliable because both use the same model.</p>
+  <div style="overflow-x:auto"><table class="tbl">
+    <thead><tr><th>Measure</th><th>Knows the map<br>1.10.4 → 1.12.1</th><th>Follows hints<br>1.10.4 → 1.12.1</th></tr></thead>
+    <tbody>
+      <tr><td>Reached the ending</td><td>0 → <b>141</b> of 144</td><td>0 → <b>58</b> of 144</td></tr>
+      <tr><td>Median quests done (of 62)</td><td>58 → <b>62</b></td><td>48 → <b>60</b></td></tr>
+      <tr><td>Median day reaching the Far Shore</td><td>4 → 4</td><td>55 → <b>40</b></td></tr>
+      <tr><td>Median day the Frost King falls</td><td>47.5 → 49.5</td><td>115 → <b>103</b></td></tr>
+      <tr><td>Median deaths per run</td><td>16 → 19</td><td>19 → 23</td></tr>
     </tbody></table></div>
-  <div class="sim">
-    <h3>What is left</h3>
-    <p><b>Normal-mode Lands are too hard for a child.</b> The explorer finished 7 of 72 normal runs against 51 of 72 in gentle mode; Lands quests got 15–85 % deadlier at 1.6–2.25×. Fix: lower the Lands to about 1.3–1.7×, or let gentle mode also halve the ring multiplier.</p>
-    <p><b>The Great Siege is still the deadliest and slowest quest</b> (about 4 deaths per run, 8.5 active days), even at 10 per night. Fix: 8 per night, or a bonus for towers and spikes.</p>
-    <p><b>The flask is a chicken-and-egg:</b> you hunt salamanders in the heat to make the heat protection. Fix: sell scales or a flask at the Frozen North trader, or no heat on the first lava tile.</p>
-    <p><b>The village fair still idles about 7 days.</b> <b>The sunken library</b> is a spike (7 answers at grade + 2 with wraiths at 2×). <b>One world in 330 has no goblin</b> in either cave, so P5 can't be done. <b>P2 is slow</b> in 27 % of worlds with few ore nodes. <b>The 3-day respawn</b> still gates imps, gargoyles and sprites. <b>Boar stuns and the igloo</b> need a how-to line. <b>Quests that complete on opening do it silently.</b></p>
-    <p style="color:var(--muted)">Confidence: the before/after comparison is solid because both runs use the same model. Absolute death counts are not: combat is a dice model and about half of explorer deaths happen while starving in a crude food model.</p>
+  <p class="qnote">Deaths went up because the Lands got harder in 1.11; that is the first open problem above.</p>
+</section>
+
+<section aria-labelledby="h-untested">
+  <span class="eyebrow">Not yet tested</span>
+  <h2 id="h-untested" style="font-size:1.3rem">Shipped after the rerun</h2>
+  <div class="untested">
+    <div><b>Crow nests (1.13.0)</b>Thieves fly to a nest you raid with a jump-strike. Checked by hand, not in the simulation.</div>
+    <div><b>Double light in caves (1.12.2)</b>Lantern plus headlamp underground. Visual change only.</div>
+    <div><b>Export in claude.ai (1.12.0)</b>Needs one real export from the play link to confirm the prompt.</div>
+    <div><b>Esc in full screen (1.12.1)</b>Holding Esc in Chrome with the file opened locally can't be tested here.</div>
   </div>
 </section>
 
 <section aria-labelledby="h-method">
   <span class="eyebrow">How this was made</span>
-  <h2 id="h-method" style="font-size:1.2rem">Method</h2>
+  <h2 id="h-method" style="font-size:1.2rem">Method and confidence</h2>
   <div class="method">
-    <div><b>World census</b>Generated all 256 seeds from a frozen copy of 1.10.4 and recorded every tile, mob, prop and village per area, then checked each quest's needs against it.</div>
-    <div><b>Story read-through</b>Drove the real game in a browser in French and English, jumping to key quest states and capturing the journal, board and story book.</div>
-    <div><b>Balance model</b>Extracted mob stats, quest targets and spawn rules, then estimated kill counts, waits and grind time per quest.</div>
+    <div><b>World census</b>All 256 seeds built with the game’s own code; every quest target checked to exist in every world.</div>
+    <div><b>Simulated runs</b>3 world types × 8 seeds × 3 season lengths × gentle on/off, played by a bot that knows the map and one that explores and follows the journal.</div>
+    <div><b>Confidence</b>Before/after changes are solid. Absolute death counts are not: fights are rolled with dice, and about half of the explorer’s deaths happen while starving in a rough food model.</div>
   </div>
 </section>
 </div>
@@ -296,90 +249,44 @@ figcaption b{color:var(--ink)}
 </div>
 
 <script>
-const LENSES={all:'All',toil:'Toil',story:'Weak or weird story',diff:'Too hard / too easy',broken:'Broken points',hints:'Hints & information'};
-const NOTES={
-  all:'Every finding, worst first. Tick the fixes you want and copy the list back to Claude.',
-  toil:'Was anything boringly long that was just toil?',
-  story:'Does the story become weak or weird at times?',
-  diff:'Are there obvious tracks that are too hard or too easy?',
-  broken:'What are the broken points in the story?',
-  hints:'Are there enough hints and information to even know you are doing story tracks?'
-};
+const LENSES={all:'All',diff:'Too hard / too easy',toil:'Toil',broken:'Broken points',hints:'Hints & information'};
+const NOTES={all:'Every open problem, worst first. Tick the fixes you want and copy the list back to Claude.',diff:'Are there tracks that are too hard or too easy?',toil:'Is anything boringly long that is just toil?',broken:'What can still stop the story?',hints:'Is there enough information to know what to do?'};
 const I=[
- {id:'B1',lens:'broken',sev:'blocker',src:'balance',q:'Lane X',t:'Brigand camp never spawns in 42 worlds',ev:'campTerrain needs forest between 6 and 14 tiles from the Far Shore arrival. Many worlds have no forest in that window, so the camp and its chief never appear.',fix:'Fall back to the nearest tile outside the window, or force a forest strip there when none exists. Log a warning in dev builds when the fallback fires.',e:'S'},
- {id:'B2',lens:'broken',sev:'blocker',src:'balance',q:'L12',t:'Shield crabs missing in 40 worlds',ev:'Crabs only spawn on beach or pier tiles, at a 50% roll. Worlds with one short beach often roll none.',fix:'Guarantee at least 2 crab spawns on the Far Shore. If no beach tile rolls one, place them on the first beach or pier tile.',e:'S'},
- {id:'B3',lens:'broken',sev:'blocker',src:'balance',q:'Lane X',t:'Library missing in 20 worlds',ev:'The library falls back to the hamlet or needs a lake. When the village roll gives neither, it never exists.',fix:'Always put the library in the first Far Shore village, independent of lakes.',e:'S'},
- {id:'B4',lens:'broken',sev:'blocker',src:'balance',q:'Lands',t:'Bomb beetle, gust sprite, harpy can be absent',ev:'Missing in 10, 6 and 5 worlds. The lands have fixed spawn tables with no minimum, so a quest kill target can be impossible.',fix:'Give every quest-target mob a minimum count per land (at least the quest target, or respawn at night).',e:'S'},
- {id:'B5',lens:'broken',sev:'blocker',src:'balance',q:'F-crow',t:'No thief crow in 6 worlds',ev:'"Le nid du voleur" asks to follow a crow, but some home areas roll none.',fix:'Guarantee one crow in the home area, spawned near the village once the quest is on the board.',e:'S'},
- {id:'B6',lens:'broken',sev:'blocker',src:'balance',q:'F9',t:'F9 needs Far Shore villages in 36% of worlds',ev:'The 4+ villages rule counts only villages already in reach. In a third of worlds the home area has fewer, so a Home quest secretly needs the Far Shore.',fix:'Count villages visited anywhere, or cap the target at the number of villages the home area has.',e:'S'},
- {id:'B7',lens:'broken',sev:'blocker',src:'story',q:'FIN',t:'The final quest is invisible',ev:'FIN (lane X) has no journal row, no board entry and no villager "!". At the end the journal reads 61 / 62 and the player has no idea what to do.',fix:'Add a "Finale" row to the journal (shown once all four lanes are done) and have the Elder show a "!" pointing at it.',e:'S'},
- {id:'B8',lens:'broken',sev:'major',src:'story',q:'L11',t:'L11 text does not match its goal',ev:'The goal counts 2 snowmen, the text describes something else, so players complete it by accident or not at all.',fix:'Rewrite the FR and EN text to say "Build 2 snowmen" with where to find snow.',e:'S'},
- {id:'B9',lens:'broken',sev:'major',src:'balance',q:'C4 · E2',t:'C4 and E2 describe the wrong task',ev:'Text and checks disagree on the target or place.',fix:'Rewrite both from the actual check code, in both languages.',e:'S'},
- {id:'T1',lens:'toil',sev:'major',src:'balance',q:'F5 · L-fish',t:'Fishing only in spring and summer',ev:'Fish quests stall in fall and winter, and no market sells fish. Up to 280 minutes of nothing to do on that track.',fix:'Add ice fishing in winter (a hole in frozen water) and a fish trade at the market for 2 metal.',e:'M'},
- {id:'T2',lens:'toil',sev:'major',src:'balance',q:'C5',t:'C5 asks for 10 imps, worlds have 4–5',ev:'Average 29 minutes of waiting for respawns.',fix:'Lower the target to 6, or let imps respawn at every nightfall in caves.',e:'S'},
- {id:'T3',lens:'toil',sev:'major',src:'balance',q:'C13',t:'C13 has exactly 2 gargoyles',ev:'The quest needs more kills than exist, so a 15-minute respawn wait is guaranteed.',fix:'Spawn a third gargoyle in the deep cave.',e:'S'},
- {id:'T4',lens:'toil',sev:'minor',src:'balance',q:'F5',t:'One fish per spot per day',ev:'Delivering 5 fish means 5 spots or 5 days.',fix:'Allow 3 catches per spot per day.',e:'S'},
- {id:'T5',lens:'toil',sev:'minor',src:'balance',q:'L12 · C12 · C8',t:'Kill-count grinds in L12, C12 and C8',ev:'Long stretches of the same fight with the same mob, low variety.',fix:'Trim targets by about a third, or let any of two mob types count.',e:'S'},
- {id:'T6',lens:'toil',sev:'minor',src:'balance',q:'Far Shore',t:'Energy shuttling back home',ev:'Long trips mean walking home to sleep, then walking back. Quick travel helps but still costs the full trip.',fix:'Let the tent restore full energy (it counts as a bed already) and mention it in a hint the first time energy gets low far from home.',e:'S'},
- {id:'T7',lens:'toil',sev:'minor',src:'balance',q:'E1',t:'E1 siege drags',ev:'Many waves of the same enemies.',fix:'Cut the wave count or add a mid-siege event (a villager brings food).',e:'S'},
- {id:'D1',lens:'diff',sev:'major',src:'balance',q:'Lands',t:'Difficulty runs backwards',ev:'The Far Shore far ring scales up to 2.25×, but the lands (meant to come later) stay at 1×. Late content is easier than mid content.',fix:'Start the lands at 1.6× and scale with ring distance like the Far Shore.',e:'S'},
- {id:'D2',lens:'diff',sev:'major',src:'balance',q:'Golem',t:'The golem takes 69 wooden-sword hits',ev:'A player who skipped weapon upgrades hits a wall with no hint why.',fix:'When the hero hits the golem with a weak weapon, show "Too tough! A stone or metal blade would help." Optionally cap the hits needed at 30.',e:'S'},
- {id:'D3',lens:'diff',sev:'minor',src:'balance',q:'Weapons',t:'Obsidian blade is a downgrade',ev:'It loses the pierce damage type of the blade before it, so armoured mobs get harder.',fix:'Give the obsidian blade pierce plus its current damage.',e:'S'},
- {id:'S1',lens:'story',sev:'major',src:'story',q:'All',t:'Quest names are French only',ev:'q.name is a plain string, so the English game shows "Le bon bois", "La commande".',fix:'Make names {fr,en} like the task text, and read them through the language helper.',e:'M'},
- {id:'S2',lens:'story',sev:'major',src:'story',q:'F3 · F5 · F9 · P2 · L1 · L9 · C8',t:'French and English disagree',ev:'F3 says 10 but counts 5. F5 leaks "F2 village". F9 hides its 4+ villages rule in English only. C8 says 3 vs 5. Several English-only brackets.',fix:'One pass over every quest: generate both texts from the same target number, drop internal ids.',e:'M'},
- {id:'S3',lens:'story',sev:'minor',src:'story',q:'{village}',t:'Every quest names the same village',ev:'The {village} token always reads Pré-Moussu, even with the new long Quebec names.',fix:'Fill {village} with the village that posted the quest (vName of its area).',e:'S'},
- {id:'S4',lens:'story',sev:'minor',src:'story',q:'Book',t:'Every book page starts "Once upon a time"',ev:'The story book reads like the same page over and over.',fix:'Rotate openings: "That morning…", "The next day…", "Under a pink sky…", "Nobody believed it, but…".',e:'S'},
- {id:'S5',lens:'story',sev:'minor',src:'story',q:'Tabs',t:'Lanes do not match their tabs',ev:'Some Home quests need Far Shore progress, so the Home tab looks stuck.',fix:'Move those quests to the lane they need, or show "needs the Far Shore" on the row.',e:'S'},
- {id:'S6',lens:'story',sev:'minor',src:'story',q:'Villagers',t:'Villager "!" always says "I need help: …"',ev:'Every villager sounds like a task list.',fix:'Give each lane 3–4 opening lines in character ("My fishing net is empty again…").',e:'S'},
- {id:'H1',lens:'hints',sev:'major',src:'story',q:'All',t:'Rewards are never shown',ev:'Each quest has an eff reward, but neither board nor journal says what you get, so there is no pull to do it.',fix:'Add a reward line with its icon on the board and in the journal.',e:'S'},
- {id:'H2',lens:'hints',sev:'major',src:'story',q:'All',t:'No quest tracker on screen',ev:'Once the journal closes, nothing reminds the player what they are doing. The first minute of play is unclear.',fix:'A one-line tracker under the energy bar with the active quest and progress (3 / 5). J opens the full journal.',e:'M'},
- {id:'H3',lens:'hints',sev:'minor',src:'story',q:'Journal · board',t:'Text cut at 96 and 60 characters',ev:'Longer tasks lose their ending, often the part that says where to go.',fix:'Wrap to two lines, or open a detail view on select.',e:'S'},
- {id:'H4',lens:'hints',sev:'minor',src:'story',q:'Journal',t:'Locked rows are unexplained',ev:'"? ? ?" rows do not say what unlocks them.',fix:'Show a hint like "Reach the Far Shore to unlock" under each locked lane.',e:'S'},
- {id:'H5',lens:'hints',sev:'minor',src:'story',q:'Start',t:'No prologue, P quests not in the home area',ev:'The game opens with no reason to go anywhere. The P lane starts away from home.',fix:'A short three-panel prologue from Grandma, and the first P quest posted in area 0.',e:'M'},
- {id:'H6',lens:'hints',sev:'minor',src:'story',q:'Journal',t:'Internal ids shown to players',ev:'Rows read "F5 · La commande"; ids also leak into task text.',fix:'Hide ids outside a debug toggle, number rows 1–n per lane instead.',e:'S'}
+ {id:'R1',lens:'broken',sev:'blocker',q:'P5',t:'One world in 330 has no goblin',ev:'Goblins only come from the random cave roll, so in rare worlds neither cave has one and “The Goblin” can never be done. That blocks the silver lantern, the wraiths, the library and the ending.',fix:'Spawn a goblin at the cave end while P5 is open, the same way mimics now spawn for P13.',e:'S'},
+ {id:'R2',lens:'diff',sev:'major',q:'Lands · C quests',t:'Normal mode is too hard in the Lands',ev:'The hint-following bot finished 7 of 72 normal runs against 51 of 72 in gentle mode. Lands quests got 15–85 % deadlier at 1.6–2.25×.',fix:'Lower the Lands to about 1.3–1.7×, or make gentle mode also halve the ring multiplier.',e:'S'},
+ {id:'R3',lens:'diff',sev:'major',q:'E1',t:'The Great Siege is the deadliest and slowest quest',ev:'About 4 deaths per run and 8.5 active days (48 calendar days from opening to done), even at 10 monsters a night.',fix:'8 monsters a night, or a bonus for holding with a tower and spikes.',e:'S'},
+ {id:'R4',lens:'diff',sev:'major',q:'C2',t:'The flask is a chicken-and-egg',ev:'You have to hunt lava salamanders in the Badlands heat to make the flask that protects you from that heat. Most of the efficient bot’s failures happened here.',fix:'Sell salamander scales (or a flask) at the Frozen North trader, or no heat drain on the first lava tile.',e:'S'},
+ {id:'R5',lens:'diff',sev:'major',q:'E2',t:'The sunken library is a difficulty spike',ev:'Seven answers in a row at grade + 2 while wraiths at 2× strength haunt the room.',fix:'Grade + 1 instead of + 2, or 5 answers, and library wraiths at base strength.',e:'S'},
+ {id:'R6',lens:'toil',sev:'minor',q:'F12',t:'The village fair is about 7 days of waiting',ev:'A season window with no theft and 5 trades; nothing to do but wait it out.',fix:'Shorten to min(4, season length) days, or count the 5 trades only.',e:'S'},
+ {id:'R7',lens:'toil',sev:'minor',q:'P2',t:'Mining 5 ore is slow when ore is scarce',ev:'27 % of worlds have fewer than 5 ore nodes near home; P2 then finishes around day 16 instead of day 8.',fix:'Guarantee 5 ore nodes across the home area and the Far Shore, or count goblin ore drops.',e:'S'},
+ {id:'R8',lens:'toil',sev:'minor',q:'C5 · C13 · C6',t:'The 3-day respawn gates kill quests in the Lands',ev:'Imps, gargoyles and gust sprites come back only every 3 days, so these quests wait on the calendar.',fix:'1-day respawn in the Lands while the quest is open.',e:'S'},
+ {id:'R9',lens:'hints',sev:'minor',q:'L13 · L17',t:'Boar stuns and the igloo are unclear',ev:'The slowest quests for the hint-following bot (5.4 and 7 active days) because the mechanic isn’t explained.',fix:'One how-to line in the journal: “Lure the boar into a tree” and “5 snow blocks around you, then the tent inside”.',e:'S'},
+ {id:'R10',lens:'hints',sev:'minor',q:'E1',t:'Siege night rule is hidden',ev:'A Great Siege night only counts if no monster is left when you go to bed or at dawn. Nothing tells the player.',fix:'Say it in the quest text and in a toast after a night that didn’t count.',e:'S'},
+ {id:'R11',lens:'hints',sev:'minor',q:'E2',t:'The library flood rule isn’t explained',ev:'A wrong answer raises the water and a flood sends you out until tomorrow; players only learn it by losing.',fix:'A one-time message on entering the library.',e:'S'},
+ {id:'R12',lens:'hints',sev:'minor',q:'All',t:'Quests that complete on opening do it silently',ev:'If you already did the thing (arcade wall, secret room, lantern…), the quest completes the moment it opens with only the usual banner.',fix:'A “You already did this!” toast so a child links cause and effect.',e:'S'},
+ {id:'R13',lens:'toil',sev:'minor',q:'C6',t:'The wind cloak has a long chain',ev:'Fish, then a bottle, then catch a gust sprite: about 3.3 active days.',fix:'Sell a bottle at the Sky village trader.',e:'S'}
 ];
-const SEVR={blocker:0,major:1,minor:2};
-I.sort((a,b)=>SEVR[a.sev]-SEVR[b.sev]);
-const SRC={story:'story agent',balance:'balance agent',sim:'simulation'};
+const SEVR={blocker:0,major:1,minor:2}; I.sort((a,b)=>SEVR[a.sev]-SEVR[b.sev]);
 const st={lens:'all',sev:new Set(['blocker','major','minor']),q:'',pick:new Set()};
-try{const s=JSON.parse(localStorage.getItem('mm-report')||'{}');if(s.lens)st.lens=s.lens;if(s.pick)st.pick=new Set(s.pick)}catch(e){}
-const save=()=>{try{localStorage.setItem('mm-report',JSON.stringify({lens:st.lens,pick:[...st.pick]}))}catch(e){}};
+try{const s=JSON.parse(localStorage.getItem('mm-report2')||'{}');if(s.lens&&LENSES[s.lens])st.lens=s.lens;if(s.pick)st.pick=new Set(s.pick.filter(id=>I.some(i=>i.id===id)))}catch(e){}
+const save=()=>{try{localStorage.setItem('mm-report2',JSON.stringify({lens:st.lens,pick:[...st.pick]}))}catch(e){}};
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
-// seam
-const seam=document.getElementById('seam');let h='';for(let i=0;i<256;i++)h+=`<i class="${i>=157?'x':''}"></i>`;seam.innerHTML=h;
-
-// bars
-const B=[['Brigand camp',42,'forest window 6–14 tiles from arrival'],['Shield crab',40,'beach or pier only, 50% roll'],['Library',20,'needs hamlet fallback or a lake'],['Bomb beetle',10,'no minimum in the lands'],['Gust sprite',6,'no minimum in the lands'],['Thief crow',6,'home area roll'],['Harpy',5,'no minimum in the lands']];
-const MAX=50;
-document.getElementById('bars').innerHTML=B.map(([n,v,w])=>`<div class="bar"><span>${n}</span><div class="track"><div class="fill" style="width:${v/MAX*100}%"></div></div><span class="v">${v}</span><span class="why">${w}</span></div>`).join('')+
- `<div class="axis"><span></span><div><span>0</span><span>10</span><span>20</span><span>30</span><span>40</span><span>50</span></div><span></span></div>`;
-
+let h='';for(let i=0;i<144;i++)h+=`<i class="${i>=141?'x':''}"></i>`;document.getElementById('seam').innerHTML=h;
 const tabs=document.getElementById('tabs');
-function renderTabs(){tabs.innerHTML=Object.entries(LENSES).map(([k,v])=>{const c=k==='all'?I.length:I.filter(i=>i.lens===k).length;return `<button class="tab" data-l="${k}" aria-pressed="${st.lens===k}">${v}<span class="c">${c}</span></button>`}).join('')}
+function renderTabs(){tabs.innerHTML=Object.entries(LENSES).map(([k,v])=>{const c=k==='all'?I.length:I.filter(i=>i.lens===k).length;return c?`<button class="tab" data-l="${k}" aria-pressed="${st.lens===k}">${v}<span class="c">${c}</span></button>`:''}).join('')}
 tabs.addEventListener('click',e=>{const b=e.target.closest('.tab');if(!b)return;st.lens=b.dataset.l;save();renderTabs();render()});
 document.querySelectorAll('.sev').forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.s;st.sev.has(s)?st.sev.delete(s):st.sev.add(s);b.setAttribute('aria-pressed',st.sev.has(s));render()}));
 document.getElementById('q').addEventListener('input',e=>{st.q=e.target.value.trim().toLowerCase();render()});
-
 const cards=document.getElementById('cards');
-function render(){
-  document.getElementById('qnote').textContent=NOTES[st.lens];
+function render(){document.getElementById('qnote').textContent=NOTES[st.lens];
   const L=I.filter(i=>(st.lens==='all'||i.lens===st.lens)&&st.sev.has(i.sev)&&(!st.q||(i.id+' '+i.t+' '+i.ev+' '+i.fix+' '+i.q).toLowerCase().includes(st.q)));
-  cards.innerHTML=L.length?L.map(i=>`<article class="card${st.pick.has(i.id)?' on':''}" data-id="${i.id}">
-    <div class="top"><div class="tags"><span class="pill ${i.sev}">${i.sev}</span><span class="pill lens">${LENSES[i.lens]}</span><span class="qid">${esc(i.q)}</span></div>
-    <h3>${esc(i.t)}</h3><p class="ev">${esc(i.ev)}</p></div>
-    <details><summary>Suggested fix</summary><div class="fix"><p>${esc(i.fix)}</p></div></details>
-    <div class="foot"><span class="effort">${i.id} · effort ${i.e} · ${SRC[i.src]}</span>
-    <label class="pick"><input type="checkbox" id="pk-${i.id}" ${st.pick.has(i.id)?'checked':''}> Fix this</label></div></article>`).join(''):'<div class="empty">No issues match these filters.</div>';
-  tray();
-}
+  cards.innerHTML=L.length?L.map(i=>`<article class="card${st.pick.has(i.id)?' on':''}" data-id="${i.id}"><div class="top"><div class="tags"><span class="pill ${i.sev}">${i.sev}</span><span class="pill lens">${LENSES[i.lens]}</span><span class="qid">${esc(i.q)}</span></div><h3>${esc(i.t)}</h3><p class="ev">${esc(i.ev)}</p></div><details><summary>Suggested fix</summary><div class="fix"><p>${esc(i.fix)}</p></div></details><div class="foot"><span class="effort">${i.id} · effort ${i.e}</span><label class="pick"><input type="checkbox" id="pk-${i.id}" ${st.pick.has(i.id)?'checked':''}> Fix this</label></div></article>`).join(''):'<div class="empty">No problems match these filters.</div>';
+  tray();}
 cards.addEventListener('change',e=>{const c=e.target.closest('.card');if(!c)return;const id=c.dataset.id;e.target.checked?st.pick.add(id):st.pick.delete(id);c.classList.toggle('on',e.target.checked);save();tray()});
 function tray(){const n=st.pick.size;document.getElementById('tray').hidden=!n;document.getElementById('trayN').textContent=n+(n===1?' fix picked':' fixes picked')}
 document.getElementById('clear').addEventListener('click',()=>{st.pick.clear();save();render()});
-document.getElementById('copy').addEventListener('click',async e=>{
-  const txt='Mine-Moule fixes to implement:\n'+I.filter(i=>st.pick.has(i.id)).map(i=>`- ${i.id} ${i.t} → ${i.fix}`).join('\n');
-  const b=e.currentTarget;try{await navigator.clipboard.writeText(txt);b.textContent='Copied'}catch(err){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='Copied'}catch(_){b.textContent='Select failed'}ta.remove()}
-  setTimeout(()=>b.textContent='Copy picked list',1600);
-});
+document.getElementById('copy').addEventListener('click',async e=>{const txt='Mine-Moule fixes to implement:\n'+I.filter(i=>st.pick.has(i.id)).map(i=>`- ${i.id} ${i.t} → ${i.fix}`).join('\n');const b=e.currentTarget;
+  try{await navigator.clipboard.writeText(txt);b.textContent='Copied'}catch(err){const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');b.textContent='Copied'}catch(_){b.textContent='Select failed'}ta.remove()}
+  setTimeout(()=>b.textContent='Copy picked list',1600);});
 renderTabs();render();
 </script>

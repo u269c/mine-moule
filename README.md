@@ -40,7 +40,7 @@ Open `mine-moule.html` in Chrome (desktop or phone). No build step, no install. 
 ## Docs
 
 - [Implementation plan](docs/implementation-plan.html): the original design and build plan, with the decisions behind it
-- [Playtest report](docs/playtest-report/index.html): findings from a 256-world census and 288 simulated playthroughs of 1.10.4, with the fixes shipped in 1.11.0
+- [Playtest report](docs/playtest-report/index.html): where the game stands now, from a 256-world census and 288 simulated playthroughs, with the open problems and suggested fixes
 
 Open them in a browser after cloning (GitHub shows HTML files as source).
 
